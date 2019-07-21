@@ -1,4 +1,4 @@
-package cc.antho.ae.common;
+package cc.antho.ae.camera;
 
 import org.joml.Matrix4f;
 import org.joml.Vector3f;

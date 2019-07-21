@@ -5,7 +5,7 @@ import static org.lwjgl.openal.AL10.*;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
-import cc.antho.ae.common.Camera;
+import cc.antho.ae.camera.Camera;
 
 public class AudioListener {
 
