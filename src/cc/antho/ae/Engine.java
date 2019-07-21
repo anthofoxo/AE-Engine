@@ -9,7 +9,7 @@ import cc.antho.ae.audio.AudioManager;
 import cc.antho.ae.common.Timer;
 import cc.antho.ae.events.window.EventWindowClosed;
 import cc.antho.ae.gameloop.FrameCounter;
-import cc.antho.ae.gameloop.GameLoop;
+import cc.antho.ae.gameloop.GameLoopVariable;
 import cc.antho.ae.gui.UIMaster;
 import cc.antho.ae.input.InputManager;
 import cc.antho.ae.log.Logger;
@@ -23,7 +23,7 @@ import cc.antho.eventsystem.EventListener;
 import lombok.Getter;
 import lombok.Setter;
 
-public final class Engine extends GameLoop implements EventListener {
+public final class Engine extends GameLoopVariable implements EventListener {
 
 	@Getter private StateManager manager = new StateManager();
 	private FrameCounter counter = new FrameCounter();
