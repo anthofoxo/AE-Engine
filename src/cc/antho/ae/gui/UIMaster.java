@@ -22,8 +22,8 @@ import cc.antho.ae.events.window.EventWindowKeyRepeat;
 import cc.antho.ae.events.window.EventWindowMousePress;
 import cc.antho.ae.input.InputManager;
 import cc.antho.eventsystem.EventCallback;
-import cc.antho.eventsystem.EventDispatcher;
 import cc.antho.eventsystem.EventHandler;
+import cc.antho.eventsystem.EventLayer;
 import cc.antho.eventsystem.EventListener;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -39,11 +39,15 @@ public class UIMaster implements EventListener {
 
 	private Map<String, ByteBuffer> fonts = new HashMap<>();
 
-	public UIMaster() {
+	private EventLayer layer;
+
+	public UIMaster(EventLayer layer) {
+
+		this.layer = layer;
 
 		handle = nvgCreate(0/* NVG_ANTIALIAS */);
 
-		EventDispatcher.registerEventListener(this);
+		layer.registerEventListener(this);
 
 	}
 
@@ -176,7 +180,7 @@ public class UIMaster implements EventListener {
 
 	public void destroy() {
 
-		EventDispatcher.deregisterEventListener(this);
+		layer.deregisterEventListener(this);
 
 		nvgDelete(handle);
 

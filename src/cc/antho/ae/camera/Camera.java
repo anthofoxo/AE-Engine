@@ -8,10 +8,10 @@ import cc.antho.ae.math.Maths;
 import lombok.Getter;
 import lombok.Setter;
 
-public final class Camera {
+public class Camera {
 
-	@Getter @Setter private Vector3f position = new Vector3f();
-	@Getter @Setter private Vector3f rotation = new Vector3f();
+	@Getter @Setter protected Vector3f position = new Vector3f();
+	@Getter @Setter protected Vector3f rotation = new Vector3f();
 
 	@Getter @Setter private float fov = 70F;
 	@Getter @Setter private float near = .1F;

@@ -1,7 +1,7 @@
 package cc.antho.ae.gameloop;
 
 import cc.antho.ae.events.EventUpsFpsUpdate;
-import cc.antho.eventsystem.EventDispatcher;
+import cc.antho.eventsystem.EventLayer;
 
 public final class FrameCounter {
 
@@ -27,11 +27,11 @@ public final class FrameCounter {
 
 	}
 
-	public void check() {
+	public void check(EventLayer layer) {
 
 		if (System.currentTimeMillis() - mark >= 1000) {
 
-			EventDispatcher.dispatch(new EventUpsFpsUpdate(ticks, frames));
+			layer.dispatch(new EventUpsFpsUpdate(ticks, frames));
 
 			ticks = 0;
 			frames = 0;

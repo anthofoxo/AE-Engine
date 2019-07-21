@@ -19,7 +19,7 @@ import cc.antho.ae.events.window.EventWindowMousePress;
 import cc.antho.ae.events.window.EventWindowMouseRelease;
 import cc.antho.ae.events.window.EventWindowResize;
 import cc.antho.ae.log.Logger;
-import cc.antho.eventsystem.EventDispatcher;
+import cc.antho.eventsystem.EventLayer;
 import lombok.Getter;
 
 public final class GLFWWindow extends Window {
@@ -27,6 +27,8 @@ public final class GLFWWindow extends Window {
 	@Getter private long handle;
 	@Getter private int width, height;
 	@Getter private String title;
+
+	private EventLayer layer;
 
 	public static void initContext() {
 
@@ -42,7 +44,9 @@ public final class GLFWWindow extends Window {
 
 	}
 
-	public GLFWWindow(GLContext context, int width, int height, String title, int swapInterval) {
+	public GLFWWindow(GLContext context, EventLayer layer, int width, int height, String title, int swapInterval) {
+
+		this.layer = layer;
 
 		glfwDefaultWindowHints();
 
@@ -62,40 +66,40 @@ public final class GLFWWindow extends Window {
 			this.width = w;
 			this.height = h;
 
-			EventDispatcher.dispatch(new EventWindowResize(this, w, h));
+			layer.dispatch(new EventWindowResize(this, w, h));
 
 		});
 
 		glfwSetCursorPosCallback(handle, (long window, double xpos, double ypos) -> {
 
-			EventDispatcher.dispatch(new EventWindowMouseMoved(this, (float) xpos, (float) ypos));
+			layer.dispatch(new EventWindowMouseMoved(this, (float) xpos, (float) ypos));
 
 		});
 
 		glfwSetMouseButtonCallback(handle, (long window, int button, int action, int mods) -> {
 
-			if (action == GLFW_PRESS) EventDispatcher.dispatch(new EventWindowMousePress(this, button));
-			else if (action == GLFW_RELEASE) EventDispatcher.dispatch(new EventWindowMouseRelease(this, button));
+			if (action == GLFW_PRESS) layer.dispatch(new EventWindowMousePress(this, button));
+			else if (action == GLFW_RELEASE) layer.dispatch(new EventWindowMouseRelease(this, button));
 
 		});
 
 		glfwSetCharCallback(handle, (long window, int codepoint) -> {
 
-			EventDispatcher.dispatch(new EventWindowKeyChar(this, (char) codepoint));
+			layer.dispatch(new EventWindowKeyChar(this, (char) codepoint));
 
 		});
 
 		glfwSetKeyCallback(handle, (long window, int key, int scancode, int action, int mods) -> {
 
-			if (action == GLFW_PRESS) EventDispatcher.dispatch(new EventWindowKeyPress(this, key));
-			else if (action == GLFW_RELEASE) EventDispatcher.dispatch(new EventWindowKeyRelease(this, key));
-			else if (action == GLFW_REPEAT) EventDispatcher.dispatch(new EventWindowKeyRepeat(this, key));
+			if (action == GLFW_PRESS) layer.dispatch(new EventWindowKeyPress(this, key));
+			else if (action == GLFW_RELEASE) layer.dispatch(new EventWindowKeyRelease(this, key));
+			else if (action == GLFW_REPEAT) layer.dispatch(new EventWindowKeyRepeat(this, key));
 
 		});
 
 		glfwSetWindowCloseCallback(handle, window -> {
 
-			EventDispatcher.dispatch(new EventWindowClosed(this));
+			layer.dispatch(new EventWindowClosed(this));
 
 		});
 
@@ -171,12 +175,6 @@ public final class GLFWWindow extends Window {
 
 	}
 
-	public void trigger() {
-
-		EventDispatcher.dispatch(new EventWindowResize(this, width, height));
-
-	}
-
 	public void pollEvents() {
 
 		glfwPollEvents();
@@ -185,7 +183,7 @@ public final class GLFWWindow extends Window {
 
 	public void triggerResize() {
 
-		EventDispatcher.dispatch(new EventWindowResize(this, width, height));
+		layer.dispatch(new EventWindowResize(this, width, height));
 
 	}
 

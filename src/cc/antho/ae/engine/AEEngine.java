@@ -1,4 +1,4 @@
-package cc.antho.ae;
+package cc.antho.ae.engine;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -14,19 +14,18 @@ import cc.antho.ae.gui.UIMaster;
 import cc.antho.ae.input.InputManager;
 import cc.antho.ae.log.Logger;
 import cc.antho.ae.state.StateManager;
-import cc.antho.ae.time.TimeProvider;
 import cc.antho.ae.window.Window;
 import cc.antho.eventsystem.EventCallback;
-import cc.antho.eventsystem.EventDispatcher;
 import cc.antho.eventsystem.EventHandler;
+import cc.antho.eventsystem.EventLayer;
 import cc.antho.eventsystem.EventListener;
 import lombok.Getter;
 import lombok.Setter;
 
-public final class Engine extends GameLoopVariable implements EventListener {
+public final class AEEngine extends GameLoopVariable implements EventListener {
 
 	@Getter private StateManager manager = new StateManager();
-	private FrameCounter counter = new FrameCounter();
+	@Getter private FrameCounter counter = new FrameCounter();
 
 	@Getter @Setter private Window window;
 
@@ -36,31 +35,37 @@ public final class Engine extends GameLoopVariable implements EventListener {
 	@Getter private UIMaster uiMaster;
 	@Getter private InputManager inputManager;
 	@Getter private AudioManager audioManager;
+	@Getter private EventLayer layer;
+
+	private AEEngineStartProps props;
 
 	@EventHandler
-	public void onEventWindowClosed(EventWindowClosed event) {
+	private void onEventWindowClosed(EventWindowClosed event) {
 
 		if (event.getWindow().equals(window)) stop();
 
 	}
 
-	public Engine(TimeProvider provider) {
+	public AEEngine(AEEngineStartProps props) {
 
-		super(provider);
+		super(props.getProvider());
+
+		this.props = props;
+		layer = props.getLayer();
 
 	}
 
 	public void init() {
 
-		uiMaster = new UIMaster();
+		uiMaster = new UIMaster(layer);
 		inputManager = new InputManager();
-		audioManager = new AudioManager(16);
+		audioManager = new AudioManager(props.getSources());
 
 		Logger.info("Starting GameLoop");
 		counter.mark();
 
-		EventDispatcher.registerEventListener(this);
-		EventDispatcher.registerEventListener(inputManager);
+		layer.registerEventListener(this);
+		layer.registerEventListener(inputManager);
 
 	}
 
@@ -91,12 +96,14 @@ public final class Engine extends GameLoopVariable implements EventListener {
 		for (int i = timers.size() - 1; i >= 0; i--) {
 
 			Timer timer = timers.get(i);
-			timer.setTimeout(timer.getTimeout() - getDelta());
+			timer.setLeft(timer.getLeft() - delta);
 
-			if (timer.getTimeout() <= 0D) {
+			if (timer.getLeft() <= 0D) {
 
 				timer.getCallback().callback();
-				timers.remove(i);
+
+				if (timer.isRepeats()) timer.setLeft(timer.getLeft() + timer.getStart());
+				else timers.remove(i);
 
 			}
 
@@ -109,7 +116,7 @@ public final class Engine extends GameLoopVariable implements EventListener {
 		uiMaster.tick(inputManager, getDelta());
 
 		counter.addTick();
-		counter.check();
+		counter.check(layer);
 
 	}
 
@@ -127,8 +134,8 @@ public final class Engine extends GameLoopVariable implements EventListener {
 
 	public void destroy() {
 
-		EventDispatcher.deregisterEventListener(this);
-		EventDispatcher.deregisterEventListener(inputManager);
+		layer.deregisterEventListener(this);
+		layer.deregisterEventListener(inputManager);
 
 		manager.setState(null);
 
