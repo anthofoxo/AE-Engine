@@ -10,16 +10,11 @@ import java.nio.ByteBuffer;
 
 import org.lwjgl.BufferUtils;
 
-import lombok.Getter;
-
-public class Texture2D {
-
-	@Getter private int handle;
-	private final int target = GL_TEXTURE_2D;
+public class Texture2D extends Texture {
 
 	public Texture2D(int handle) {
 
-		this.handle = handle;
+		super(GL_TEXTURE_2D, handle);
 
 	}
 
@@ -68,7 +63,7 @@ public class Texture2D {
 				int alpha = (pixel & 0xFF000000) >> 24;
 				int red = (pixel & 0x00FF0000) >> 16;
 				int green = (pixel & 0x0000FF00) >> 8;
-				int blue = (pixel & 0x000000FF);
+				int blue = pixel & 0x000000FF;
 
 				pixels.put((byte) red);
 				pixels.put((byte) green);
