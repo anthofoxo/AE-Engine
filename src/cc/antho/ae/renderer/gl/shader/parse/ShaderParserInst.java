@@ -2,7 +2,9 @@ package cc.antho.ae.renderer.gl.shader.parse;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,7 +29,7 @@ public class ShaderParserInst {
 	private StringBuilder vertex_final = new StringBuilder();
 	private StringBuilder fragment_final = new StringBuilder();
 
-	private List<LinkInstance> autoLinks = new ArrayList<>();
+	private Map<LinkInstance, LinkInstance> autoLinks = new HashMap<>();
 
 	private List<LinkInstance> inputs = new ArrayList<>();
 	private List<LinkInstance> links = new ArrayList<>();
@@ -81,10 +83,8 @@ public class ShaderParserInst {
 
 				String[] tokens = match_part.split("\\s+");
 
-				LinkInstance link = new LinkInstance(tokens[0], tokens[1], null);
-
 				// Add to content list
-				autoLinks.add(link);
+				autoLinks.put(new LinkInstance(tokens[0], tokens[1], null), new LinkInstance(tokens[0], tokens[1], null));
 
 			} else break;
 
@@ -191,16 +191,18 @@ public class ShaderParserInst {
 
 	private void convertAutoLinks() {
 
-		for (int i = 0; i < autoLinks.size(); i++) {
-
-			LinkInstance inst = autoLinks.get(i);
+		for (LinkInstance inst : autoLinks.keySet()) {
 
 			String name = inst.name;
+			String newname;
 
-			if (!name.contains("_")) inst.name = "v_" + name;
-			else inst.name = "v" + name.substring(name.indexOf('_'));
+			if (!name.contains("_")) newname = "v_" + name;
+			else newname = "v" + name.substring(name.indexOf('_'));
 
-			links.add(inst);
+			LinkInstance val = autoLinks.get(inst);
+			val.name = newname;
+
+			links.add(val);
 
 		}
 
@@ -269,12 +271,12 @@ public class ShaderParserInst {
 
 		vertex_final.append("\n");
 
-		for (LinkInstance link : autoLinks) {
+		for (LinkInstance link : autoLinks.keySet()) {
 
 			vertex_main.append("\t");
-			vertex_main.append(link.name);
+			vertex_main.append(autoLinks.get(link).name);
 			vertex_main.append(" = ");
-			vertex_main.append(link.name.replaceFirst("v_", "in_"));
+			vertex_main.append(link.name);
 			vertex_main.append(";\n");
 
 		}
@@ -284,8 +286,6 @@ public class ShaderParserInst {
 		vertex_main.insert(0, "void main() {\n");
 
 		vertex_final.append(vertex_main.toString());
-
-		System.out.println(vertex_final);
 
 	}
 
@@ -355,8 +355,6 @@ public class ShaderParserInst {
 		fragment_main.insert(0, "void main() {\n");
 
 		fragment_final.append(fragment_main.toString());
-
-		System.out.println(fragment_final);
 
 	}
 
