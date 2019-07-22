@@ -14,6 +14,7 @@ public final class ShaderSource {
 
 		glShaderSource(handle, source);
 		glCompileShader(handle);
+
 		ShaderUtil.checkError(false, handle, GL_COMPILE_STATUS);
 
 	}

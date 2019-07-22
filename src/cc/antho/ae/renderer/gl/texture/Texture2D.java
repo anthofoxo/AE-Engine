@@ -23,9 +23,22 @@ public class Texture2D extends Texture {
 		this(glGenTextures());
 		bind(0);
 
+		linearMipmap();
+		clamp();
+
+	}
+
+	public void linearMipmap() {
+
 		glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		clamp();
+
+	}
+
+	public void linear() {
+
+		glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	}
 
@@ -75,6 +88,13 @@ public class Texture2D extends Texture {
 		pixels.flip();
 
 		storage(width, height, pixels);
+
+	}
+
+	public void storage(int width, int height, int internalFormat, int format, int type, ByteBuffer pixels) {
+
+		glTexImage2D(target, 0, internalFormat, width, height, 0, format, type, pixels);
+		glGenerateMipmap(target);
 
 	}
 
