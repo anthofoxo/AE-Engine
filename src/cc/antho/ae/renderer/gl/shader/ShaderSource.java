@@ -1,4 +1,4 @@
-package cc.antho.ae.gl.shader;
+package cc.antho.ae.renderer.gl.shader;
 
 import static org.lwjgl.opengl.GL20.*;
 

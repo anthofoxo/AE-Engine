@@ -1,4 +1,4 @@
-package cc.antho.ae.gl.model;
+package cc.antho.ae.renderer.gl.model;
 
 import static org.lwjgl.opengl.GL30.*;
 

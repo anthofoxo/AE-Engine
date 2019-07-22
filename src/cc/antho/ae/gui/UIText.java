@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 import org.lwjgl.nanovg.NVGColor;
 import org.lwjgl.system.MemoryStack;
 
-import cc.antho.ae.gl.color.Color;
+import cc.antho.ae.renderer.color.Color;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

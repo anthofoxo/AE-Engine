@@ -3,7 +3,7 @@ package cc.antho.ae.framebuffer;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL30.*;
 
-import cc.antho.ae.gl.texture.Texture2D;
+import cc.antho.ae.renderer.gl.texture.Texture2D;
 import lombok.Getter;
 
 public final class Framebuffer {

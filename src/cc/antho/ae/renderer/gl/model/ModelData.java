@@ -1,6 +1,6 @@
-package cc.antho.ae.gl.model;
+package cc.antho.ae.renderer.gl.model;
 
-import cc.antho.ae.gl.model.Dataset;
+import cc.antho.ae.renderer.gl.model.Dataset;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

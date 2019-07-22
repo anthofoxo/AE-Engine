@@ -1,4 +1,4 @@
-package cc.antho.ae.gl.model;
+package cc.antho.ae.renderer.gl.model;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -2,10 +2,10 @@ package cc.antho.ae.gui;
 
 import org.lwjgl.glfw.GLFW;
 
-import cc.antho.ae.gl.color.Color;
 import cc.antho.ae.gui.UIText.HAlignment;
 import cc.antho.ae.gui.UIText.VAlignment;
 import cc.antho.ae.math.Maths;
+import cc.antho.ae.renderer.color.Color;
 
 public class UIButton extends UIComponent {
 

@@ -1,4 +1,4 @@
-package cc.antho.ae.gl.shader;
+package cc.antho.ae.renderer.gl.shader;
 
 import static org.lwjgl.opengl.GL20.*;
 
@@ -8,7 +8,7 @@ import java.util.Map;
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
 
-import cc.antho.ae.gl.color.Color;
+import cc.antho.ae.renderer.color.Color;
 import lombok.Getter;
 
 public final class ShaderProgram {
@@ -44,15 +44,51 @@ public final class ShaderProgram {
 
 	}
 
+	public void uniform1i(String name, int v0) {
+
+		glUniform1i(getUniformLocation(name), v0);
+
+	}
+
 	public void uniform1f(String name, float v0) {
 
 		glUniform1f(getUniformLocation(name), v0);
 
 	}
-	
-	public void uniform1i(String name, int v0) {
 
-		glUniform1i(getUniformLocation(name), v0);
+	public void uniform2i(String name, int v0, int v1) {
+
+		glUniform2i(getUniformLocation(name), v0, v1);
+
+	}
+
+	public void uniform2f(String name, float v0, float v1) {
+
+		glUniform2f(getUniformLocation(name), v0, v1);
+
+	}
+
+	public void uniform3i(String name, int v0, int v1, int v2) {
+
+		glUniform3i(getUniformLocation(name), v0, v1, v2);
+
+	}
+
+	public void uniform3f(String name, float v0, float v1, float v2) {
+
+		glUniform3f(getUniformLocation(name), v0, v1, v2);
+
+	}
+	
+	public void uniform4i(String name, int v0, int v1, int v2, int v3) {
+
+		glUniform4i(getUniformLocation(name), v0, v1, v2, v3);
+
+	}
+
+	public void uniform4f(String name, float v0, float v1, float v2, float v3) {
+
+		glUniform4f(getUniformLocation(name), v0, v1, v2, v3);
 
 	}
 

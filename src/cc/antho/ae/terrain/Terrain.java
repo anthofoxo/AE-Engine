@@ -3,8 +3,8 @@ package cc.antho.ae.terrain;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
-import cc.antho.ae.gl.model.ModelData;
 import cc.antho.ae.math.Maths;
+import cc.antho.ae.renderer.gl.model.ModelData;
 import lombok.Getter;
 
 public final class Terrain {

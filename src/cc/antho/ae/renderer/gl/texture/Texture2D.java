@@ -1,4 +1,4 @@
-package cc.antho.ae.gl.texture;
+package cc.antho.ae.renderer.gl.texture;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL12.*;

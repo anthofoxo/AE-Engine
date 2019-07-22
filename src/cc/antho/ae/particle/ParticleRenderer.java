@@ -9,11 +9,11 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 import cc.antho.ae.camera.Camera;
-import cc.antho.ae.gl.model.Dataset;
-import cc.antho.ae.gl.model.RawModel;
-import cc.antho.ae.gl.shader.ShaderProgram;
-import cc.antho.ae.gl.shader.ShaderUtil;
 import cc.antho.ae.math.Maths;
+import cc.antho.ae.renderer.gl.model.Dataset;
+import cc.antho.ae.renderer.gl.model.RawModel;
+import cc.antho.ae.renderer.gl.shader.ShaderProgram;
+import cc.antho.ae.renderer.gl.shader.ShaderUtil;
 
 public class ParticleRenderer {
 

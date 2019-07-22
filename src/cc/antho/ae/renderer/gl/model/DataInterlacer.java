@@ -1,4 +1,4 @@
-package cc.antho.ae.gl.model;
+package cc.antho.ae.renderer.gl.model;
 
 public final class DataInterlacer {
 

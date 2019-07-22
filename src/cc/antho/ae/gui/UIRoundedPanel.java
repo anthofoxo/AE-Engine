@@ -4,7 +4,7 @@ import static org.lwjgl.nanovg.NanoVG.*;
 
 import org.lwjgl.nanovg.NVGColor;
 
-import cc.antho.ae.gl.color.Color;
+import cc.antho.ae.renderer.color.Color;
 import lombok.Getter;
 import lombok.Setter;
 

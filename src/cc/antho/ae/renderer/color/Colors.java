@@ -1,4 +1,4 @@
-package cc.antho.ae.gl.color;
+package cc.antho.ae.renderer.color;
 
 public final class Colors {
 

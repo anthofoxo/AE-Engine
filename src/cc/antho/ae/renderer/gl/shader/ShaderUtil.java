@@ -1,4 +1,4 @@
-package cc.antho.ae.gl.shader;
+package cc.antho.ae.renderer.gl.shader;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
@@ -28,6 +28,20 @@ public final class ShaderUtil {
 			Logger.error(error);
 
 		}
+
+	}
+
+	public static ShaderProgram createProgramDirect(String vss, String fss) {
+
+		ShaderSource vs = new ShaderSource(vss, GL_VERTEX_SHADER);
+		ShaderSource fs = new ShaderSource(fss, GL_FRAGMENT_SHADER);
+
+		ShaderProgram program = new ShaderProgram(vs, fs);
+
+		vs.destroy();
+		fs.destroy();
+
+		return program;
 
 	}
 

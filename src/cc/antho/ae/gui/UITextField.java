@@ -9,10 +9,10 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.nanovg.NVGColor;
 import org.lwjgl.system.MemoryStack;
 
-import cc.antho.ae.gl.color.Color;
-import cc.antho.ae.gl.color.Colors;
 import cc.antho.ae.gui.UIText.HAlignment;
 import cc.antho.ae.gui.UIText.VAlignment;
+import cc.antho.ae.renderer.color.Color;
+import cc.antho.ae.renderer.color.Colors;
 
 public class UITextField extends UIComponent {
 

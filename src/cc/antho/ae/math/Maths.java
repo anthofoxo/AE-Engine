@@ -3,7 +3,7 @@ package cc.antho.ae.math;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
-import cc.antho.ae.gl.color.Color;
+import cc.antho.ae.renderer.color.Color;
 
 public final class Maths {
 
