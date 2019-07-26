@@ -1,4 +1,4 @@
-package cc.antho.ae.terrain;
+package cc.antho.ae.terrain.generator;
 
 import cc.antho.ae.math.OpenSimplexNoise;
 

@@ -31,7 +31,7 @@ import lombok.Getter;
 public class UIMaster implements EventListener {
 
 	@Getter private long handle;
-	@Getter(value = AccessLevel.PACKAGE) private float width, height;
+	@Getter private float width, height;
 	@Getter(value = AccessLevel.PACKAGE) private double delta;
 	@Getter(value = AccessLevel.PACKAGE) private InputManager input;
 

@@ -8,7 +8,7 @@ import org.joml.Vector3f;
 import cc.antho.ae.math.Maths;
 import cc.antho.ae.math.raw.RawFloat;
 
-public class FloatBuilder {
+public class FloatBuilder extends DataBuilder {
 
 	private List<RawFloat> list = new ArrayList<>();
 
@@ -28,6 +28,18 @@ public class FloatBuilder {
 	public void append(FloatBuilder values) {
 
 		append(values.toArray());
+
+	}
+
+	public void set(int index, float value) {
+
+		list.get(index).value = value;
+
+	}
+
+	public float get(int index) {
+
+		return list.get(index).value;
 
 	}
 
@@ -51,6 +63,14 @@ public class FloatBuilder {
 			list.get(i + 2).value += z;
 
 		}
+
+	}
+
+	public void add(int... dims) {
+
+		for (int i = 0; i < list.size(); i += dims.length)
+			for (int j = 0; j < dims.length; j++)
+				list.get(i + j).value += dims[j];
 
 	}
 
@@ -137,6 +157,18 @@ public class FloatBuilder {
 			list.get(i + 2).value = pos.z;
 
 		}
+
+	}
+
+	public int size() {
+
+		return list.size();
+
+	}
+
+	public void clear() {
+
+		list.clear();
 
 	}
 

@@ -1,4 +1,4 @@
-package cc.antho.ae.terrain;
+package cc.antho.ae.terrain.generator;
 
 public final class FlatTerrainGenerator extends TerrainGenerator {
 

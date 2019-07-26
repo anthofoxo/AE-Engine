@@ -5,97 +5,100 @@ import org.joml.Vector3f;
 
 import cc.antho.ae.math.Maths;
 import cc.antho.ae.renderer.gl.model.ModelData;
+import cc.antho.ae.terrain.generator.TerrainGenerator;
+import cc.antho.ae.terrain.generator.TerrainGeneratorPositionMode;
 import lombok.Getter;
 
 public final class Terrain {
 
-	@Getter private ModelData data;
+	@Getter private int x, z;
+	@Getter private TerrainGroup group;
+
 	private float[][] heights;
 	private Vector3f[][] normals;
-	private int vertexCount;
-	private float size;
+	private TerrainGenerator generator;
 
-	public Terrain(int vertexCount, float size, TerrainGenerator generator) {
+	public Terrain(int x, int z, TerrainGroup group, TerrainGenerator generator) {
 
-		this.vertexCount = vertexCount;
-		this.size = size;
+		this.x = x;
+		this.z = z;
+		this.group = group;
+		this.generator = generator;
 
-		heights = new float[vertexCount][vertexCount];
-		normals = new Vector3f[vertexCount][vertexCount];
-		fillHeights(size, generator);
-		generate(size);
+		heights = new float[group.getVertexCount()][group.getVertexCount()];
+		normals = new Vector3f[group.getVertexCount()][group.getVertexCount()];
 
 	}
 
-	private void fillHeights(float size, TerrainGenerator generator) {
+	public void generateHeightData() {
 
-		for (int i = 0; i < vertexCount; i++) {
-			for (int j = 0; j < vertexCount; j++) {
+		for (int i = 0; i < group.getVertexCount(); i++) {
+			for (int j = 0; j < group.getVertexCount(); j++) {
 
-				float x = (float) j / ((float) vertexCount - 1) * size;
-				float z = (float) i / ((float) vertexCount - 1) * size;
+				float x = ((float) j / ((float) group.getVertexCount() - 1) * group.getSize());
+				float z = ((float) i / ((float) group.getVertexCount() - 1) * group.getSize());
+
+				if (generator.mode == TerrainGeneratorPositionMode.WORLD) {
+
+					x += this.x * group.getSize();
+					z += this.z * group.getSize();
+
+				}
+
 				heights[j][i] = generator.getHeight(x, z);
 
 			}
+
 		}
 
 	}
 
-	public Vector3f getNormal(float wx, float wz) {
+	Vector3f getNormal(float tx, float tz) {
 
-		float tx = wx - 0;
-		float tz = wz - 0;
-		float gridSquareSize = size / (heights.length - 1);
-		int gx = (int) Math.floor(tx / gridSquareSize);
-		int gz = (int) Math.floor(tz / gridSquareSize);
-
-		if (gx < 0 || gz < 0 || gx >= heights.length - 1 || gz >= heights.length - 1) return new Vector3f(0F, 1F, 0F);
+		float gridSquareSize = group.getSize() / (heights.length - 1);
+		int gx = Maths.floor(tx / gridSquareSize);
+		int gz = Maths.floor(tz / gridSquareSize);
 
 		float xCoord = (tx % gridSquareSize) / gridSquareSize;
 		float zCoord = (tz % gridSquareSize) / gridSquareSize;
 
-		if (xCoord <= (1 - zCoord)) {
+		float x, y, z;
 
-			float x = Maths.barryCentric(new Vector3f(0, normals[gx][gz].x, 0), new Vector3f(1, normals[gx + 1][gz].x, 0), new Vector3f(0, normals[gx][gz + 1].x, 1), new Vector2f(xCoord, zCoord));
-			float y = Maths.barryCentric(new Vector3f(0, normals[gx][gz].y, 0), new Vector3f(1, normals[gx + 1][gz].y, 0), new Vector3f(0, normals[gx][gz + 1].y, 1), new Vector2f(xCoord, zCoord));
-			float z = Maths.barryCentric(new Vector3f(0, normals[gx][gz].z, 0), new Vector3f(1, normals[gx + 1][gz].z, 0), new Vector3f(0, normals[gx][gz + 1].z, 1), new Vector2f(xCoord, zCoord));
+		if (xCoord <= (1F - zCoord)) {
 
-			return new Vector3f(x, y, z).normalize();
+			x = Maths.barryCentric(new Vector3f(0F, normals[gx][gz].x, 0F), new Vector3f(1F, normals[gx + 1][gz].x, 0F), new Vector3f(0F, normals[gx][gz + 1].x, 1F), new Vector2f(xCoord, zCoord));
+			y = Maths.barryCentric(new Vector3f(0F, normals[gx][gz].y, 0F), new Vector3f(1F, normals[gx + 1][gz].y, 0F), new Vector3f(0F, normals[gx][gz + 1].y, 1F), new Vector2f(xCoord, zCoord));
+			z = Maths.barryCentric(new Vector3f(0F, normals[gx][gz].z, 0F), new Vector3f(1F, normals[gx + 1][gz].z, 0F), new Vector3f(0F, normals[gx][gz + 1].z, 1F), new Vector2f(xCoord, zCoord));
 
 		} else {
 
-			float x = Maths.barryCentric(new Vector3f(1, normals[gx + 1][gz].x, 0), new Vector3f(1, normals[gx + 1][gz + 1].x, 1), new Vector3f(0, normals[gx][gz + 1].x, 1), new Vector2f(xCoord, zCoord));
-			float y = Maths.barryCentric(new Vector3f(1, normals[gx + 1][gz].y, 0), new Vector3f(1, normals[gx + 1][gz + 1].y, 1), new Vector3f(0, normals[gx][gz + 1].y, 1), new Vector2f(xCoord, zCoord));
-			float z = Maths.barryCentric(new Vector3f(1, normals[gx + 1][gz].z, 0), new Vector3f(1, normals[gx + 1][gz + 1].z, 1), new Vector3f(0, normals[gx][gz + 1].z, 1), new Vector2f(xCoord, zCoord));
-
-			return new Vector3f(x, y, z).normalize();
+			x = Maths.barryCentric(new Vector3f(1F, normals[gx + 1][gz].x, 0F), new Vector3f(1F, normals[gx + 1][gz + 1].x, 1F), new Vector3f(0F, normals[gx][gz + 1].x, 1F), new Vector2f(xCoord, zCoord));
+			y = Maths.barryCentric(new Vector3f(1F, normals[gx + 1][gz].y, 0F), new Vector3f(1F, normals[gx + 1][gz + 1].y, 1F), new Vector3f(0F, normals[gx][gz + 1].y, 1F), new Vector2f(xCoord, zCoord));
+			z = Maths.barryCentric(new Vector3f(1F, normals[gx + 1][gz].z, 0F), new Vector3f(1F, normals[gx + 1][gz + 1].z, 1F), new Vector3f(0F, normals[gx][gz + 1].z, 1F), new Vector2f(xCoord, zCoord));
 
 		}
 
+		return new Vector3f(x, y, z).normalize();
+
 	}
 
-	public float getHeight(float wx, float wz) {
+	float getHeight(float tx, float tz) {
 
-		float tx = wx - 0;
-		float tz = wz - 0;
-		float gridSquareSize = size / (heights.length - 1);
-		int gx = (int) Math.floor(tx / gridSquareSize);
-		int gz = (int) Math.floor(tz / gridSquareSize);
-
-		if (gx < 0 || gz < 0 || gx >= heights.length - 1 || gz >= heights.length - 1) return 0;
+		float gridSquareSize = group.getSize() / (heights.length - 1);
+		int gx = Maths.floor(tx / gridSquareSize);
+		int gz = Maths.floor(tz / gridSquareSize);
 
 		float xCoord = (tx % gridSquareSize) / gridSquareSize;
 		float zCoord = (tz % gridSquareSize) / gridSquareSize;
 
-		if (xCoord <= (1 - zCoord)) {
-			return Maths.barryCentric(new Vector3f(0, heights[gx][gz], 0), new Vector3f(1, heights[gx + 1][gz], 0), new Vector3f(0, heights[gx][gz + 1], 1), new Vector2f(xCoord, zCoord));
-		} else {
-			return Maths.barryCentric(new Vector3f(1, heights[gx + 1][gz], 0), new Vector3f(1, heights[gx + 1][gz + 1], 1), new Vector3f(0, heights[gx][gz + 1], 1), new Vector2f(xCoord, zCoord));
-		}
+		if (xCoord <= (1 - zCoord)) return Maths.barryCentric(new Vector3f(0F, heights[gx][gz], 0F), new Vector3f(1F, heights[gx + 1][gz], 0F), new Vector3f(0F, heights[gx][gz + 1], 1F), new Vector2f(xCoord, zCoord));
+		else return Maths.barryCentric(new Vector3f(1F, heights[gx + 1][gz], 0F), new Vector3f(1, heights[gx + 1][gz + 1], 1F), new Vector3f(0, heights[gx][gz + 1], 1F), new Vector2f(xCoord, zCoord));
 
 	}
 
-	private void generate(float size) {
+	public ModelData generateModelData() {
+
+		int vertexCount = group.getVertexCount();
 
 		int count = vertexCount * vertexCount;
 
@@ -106,12 +109,12 @@ public final class Terrain {
 
 		int vertexPointer = 0;
 
-		for (int i = 0; i < vertexCount; i++) {
+		for (int i = 0; i < vertexCount; i++)
 			for (int j = 0; j < vertexCount; j++) {
 
-				vertices[vertexPointer * 3] = (float) j / ((float) vertexCount - 1) * size;
+				vertices[vertexPointer * 3] = ((float) j / ((float) vertexCount - 1) * group.getSize()) + x * group.getSize();
 				vertices[vertexPointer * 3 + 1] = heights[j][i];
-				vertices[vertexPointer * 3 + 2] = (float) i / ((float) vertexCount - 1) * size;
+				vertices[vertexPointer * 3 + 2] = ((float) i / ((float) vertexCount - 1) * group.getSize()) + z * group.getSize();
 
 				Vector3f normal = calcNormal(j, i);
 				this.normals[j][i] = normal;
@@ -123,12 +126,14 @@ public final class Terrain {
 				textureCoords[vertexPointer * 2] = (float) j / ((float) vertexCount - 1);
 				textureCoords[vertexPointer * 2 + 1] = (float) i / ((float) vertexCount - 1);
 				vertexPointer++;
+
 			}
-		}
 
 		int pointer = 0;
-		for (int gz = 0; gz < vertexCount - 1; gz++) {
+
+		for (int gz = 0; gz < vertexCount - 1; gz++)
 			for (int gx = 0; gx < vertexCount - 1; gx++) {
+
 				int topLeft = (gz * vertexCount) + gx;
 				int topRight = topLeft + 1;
 				int bottomLeft = ((gz + 1) * vertexCount) + gx;
@@ -139,30 +144,22 @@ public final class Terrain {
 				indices[pointer++] = topRight;
 				indices[pointer++] = bottomLeft;
 				indices[pointer++] = bottomRight;
+
 			}
-		}
 
-		data = new ModelData(vertices, textureCoords, normals, null, indices);
-
-	}
-
-	private float getHeight(int x, int z) {
-
-		if (x < 0) x = 0;
-		if (z < 0) z = 0;
-		if (x >= vertexCount) x = vertexCount - 1;
-		if (z >= vertexCount) z = vertexCount - 1;
-
-		return heights[x][z];
+		return new ModelData(vertices, textureCoords, normals, null, indices);
 
 	}
 
-	private Vector3f calcNormal(int x, int z) {
+	private Vector3f calcNormal(float x, float z) {
 
-		float heightL = getHeight(x - 1, z);
-		float heightR = getHeight(x + 1, z);
-		float heightD = getHeight(x, z - 1);
-		float heightU = getHeight(x, z + 1);
+		x += this.x * group.getSize();
+		z += this.z * group.getSize();
+
+		float heightL = group.getHeight(x - 1F, z);
+		float heightR = group.getHeight(x + 1F, z);
+		float heightD = group.getHeight(x, z - 1F);
+		float heightU = group.getHeight(x, z + 1F);
 
 		return new Vector3f(heightL - heightR, 2F, heightD - heightU).normalize();
 

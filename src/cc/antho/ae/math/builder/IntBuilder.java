@@ -5,7 +5,7 @@ import java.util.List;
 
 import cc.antho.ae.math.raw.RawInt;
 
-public class IntBuilder {
+public class IntBuilder extends DataBuilder {
 
 	private List<RawInt> list = new ArrayList<>();
 
@@ -114,6 +114,18 @@ public class IntBuilder {
 			array[i] = list.get(i).value;
 
 		return array;
+
+	}
+
+	public int size() {
+
+		return list.size();
+
+	}
+
+	public void clear() {
+
+		list.clear();
 
 	}
 

@@ -13,6 +13,7 @@ import cc.antho.ae.gameloop.GameLoopVariable;
 import cc.antho.ae.gui.UIMaster;
 import cc.antho.ae.input.InputManager;
 import cc.antho.ae.log.Logger;
+import cc.antho.ae.renderer.Renderer;
 import cc.antho.ae.state.StateManager;
 import cc.antho.ae.window.Window;
 import cc.antho.eventsystem.EventCallback;
@@ -36,6 +37,7 @@ public final class AEEngine extends GameLoopVariable implements EventListener {
 	@Getter private InputManager inputManager;
 	@Getter private AudioManager audioManager;
 	@Getter private EventLayer layer;
+	@Getter private Renderer renderer = new Renderer();
 
 	private AEEngineStartProps props;
 
