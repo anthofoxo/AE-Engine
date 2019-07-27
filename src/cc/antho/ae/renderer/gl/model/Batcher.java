@@ -23,7 +23,14 @@ public class Batcher {
 
 		this.positions.append(positions);
 		this.textures.append(textures);
-		this.normals.append(normals);
+
+		if (normals != null) this.normals.append(normals);
+		else {
+
+			this.final_normals = null;
+			this.normals = null;
+
+		}
 
 		if (indices != null) this.indices.append(indices);
 		else {
@@ -39,11 +46,15 @@ public class Batcher {
 
 	public void addInstance(Matrix4f transformation, int[] textureOffsets) {
 
-		for (int n = 0; n < normals.size(); n += 3) {
+		if (normals != null) {
 
-			Vector4f normal = new Vector4f(normals.get(n + 0), normals.get(n + 1), normals.get(n + 2), 0F);
-			transformation.transform(normal);
-			final_normals.append(normal.x, normal.y, normal.z);
+			for (int n = 0; n < normals.size(); n += 3) {
+
+				Vector4f normal = new Vector4f(normals.get(n + 0), normals.get(n + 1), normals.get(n + 2), 0F);
+				transformation.transform(normal);
+				final_normals.append(normal.x, normal.y, normal.z);
+
+			}
 
 		}
 
@@ -76,11 +87,11 @@ public class Batcher {
 		final_textures.mul(textureScales);
 
 		RawModel model = new RawModel(primitive);
-		model.uploadData(final_indices == null ? null : final_indices.toArray(), new Dataset(final_positions.toArray(), 3), new Dataset(final_textures.toArray(), 2), new Dataset(final_normals.toArray(), 3));
+		model.uploadData(final_indices == null ? null : final_indices.toArray(), new Dataset(final_positions.toArray(), 3), new Dataset(final_textures.toArray(), 2), final_indices == null ? null : new Dataset(final_normals.toArray(), 3));
 
 		final_positions.clear();
 		final_textures.clear();
-		final_normals.clear();
+		if (final_normals != null) final_normals.clear();
 		if (final_indices != null) final_indices.clear();
 
 		return model;

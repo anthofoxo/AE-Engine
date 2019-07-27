@@ -5,6 +5,9 @@ import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import lombok.Getter;
 
 public final class RawModel {
@@ -25,7 +28,23 @@ public final class RawModel {
 
 	}
 
+	private Dataset[] parseNull(Dataset[] datasets) {
+
+		List<Dataset> sets = new ArrayList<>();
+
+		for (int i = 0; i < datasets.length; i++)
+			if (datasets[i] != null) sets.add(datasets[i]);
+
+		Dataset[] newSet = new Dataset[sets.size()];
+		sets.toArray(newSet);
+
+		return newSet;
+
+	}
+
 	public void uploadData(int[] indices, Dataset... datasets) {
+
+		datasets = parseNull(datasets);
 
 		vao = new VertexArray();
 		vbo = glGenBuffers();
