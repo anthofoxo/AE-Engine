@@ -193,4 +193,10 @@ public class UIMaster implements EventListener {
 
 	}
 
+	public void removeAll() {
+
+		elements.clear();
+
+	}
+
 }

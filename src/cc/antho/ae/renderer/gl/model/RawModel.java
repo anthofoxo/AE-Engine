@@ -8,9 +8,10 @@ import static org.lwjgl.opengl.GL30.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import cc.antho.ae.renderer.Destroyable;
 import lombok.Getter;
 
-public final class RawModel {
+public final class RawModel implements Destroyable {
 
 	@Getter private final int primitive;
 	@Getter private VertexArray vao;

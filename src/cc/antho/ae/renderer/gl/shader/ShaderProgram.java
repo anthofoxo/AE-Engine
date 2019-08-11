@@ -8,10 +8,11 @@ import java.util.Map;
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
 
+import cc.antho.ae.renderer.Destroyable;
 import cc.antho.ae.renderer.color.Color;
 import lombok.Getter;
 
-public final class ShaderProgram {
+public final class ShaderProgram implements Destroyable {
 
 	public static final ShaderProgram DEFAULT = new ShaderProgram(0);
 
@@ -79,7 +80,7 @@ public final class ShaderProgram {
 		glUniform3f(getUniformLocation(name), v0, v1, v2);
 
 	}
-	
+
 	public void uniform4i(String name, int v0, int v1, int v2, int v3) {
 
 		glUniform4i(getUniformLocation(name), v0, v1, v2, v3);
@@ -129,7 +130,7 @@ public final class ShaderProgram {
 
 	}
 
-	public void destory() {
+	public void destroy() {
 
 		glDeleteProgram(handle);
 

@@ -1,10 +1,12 @@
 package cc.antho.ae.renderer.gl.query;
 
+import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 
+import cc.antho.ae.renderer.Destroyable;
 import lombok.Getter;
 
-public class Query {
+public class Query implements Destroyable {
 
 	@Getter private int handle;
 	@Getter private int type;

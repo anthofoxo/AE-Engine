@@ -65,7 +65,7 @@ public class UIText extends UIComponent {
 			String t = text;
 			if (t == null || t.isEmpty()) t = " ";
 
-			ByteBuffer buffer = stack.ASCII(t);
+			ByteBuffer buffer = stack.ASCII(t, false);
 
 			nvgFillColor(owner.getHandle(), internalColor);
 			nvgTextAlign(owner.getHandle(), hAlign.mask | vAlign.mask);

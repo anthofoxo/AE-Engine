@@ -2,9 +2,10 @@ package cc.antho.ae.framebuffer;
 
 import static org.lwjgl.opengl.GL30.*;
 
+import cc.antho.ae.renderer.Destroyable;
 import lombok.Getter;
 
-public final class Renderbuffer {
+public final class Renderbuffer implements Destroyable {
 
 	public static Renderbuffer DEFAULT = new Renderbuffer(0);
 

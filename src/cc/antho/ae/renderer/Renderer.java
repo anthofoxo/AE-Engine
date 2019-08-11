@@ -12,6 +12,14 @@ public class Renderer {
 
 	}
 
+	public void colorMask(boolean flag) {
+
+		colorMask(flag, flag, flag, flag);
+
+	}
+
+	// GL
+
 	public void clearColor(float r, float g, float b, float a) {
 
 		glClearColor(r, g, b, a);
@@ -21,6 +29,18 @@ public class Renderer {
 	public void clear(int mask) {
 
 		glClear(mask);
+
+	}
+
+	public void depthMask(boolean flag) {
+
+		glDepthMask(flag);
+
+	}
+
+	public void colorMask(boolean r, boolean g, boolean b, boolean a) {
+
+		glColorMask(r, g, b, a);
 
 	}
 

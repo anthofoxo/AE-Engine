@@ -3,10 +3,11 @@ package cc.antho.ae.framebuffer;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL30.*;
 
+import cc.antho.ae.renderer.Destroyable;
 import cc.antho.ae.renderer.gl.texture.Texture2D;
 import lombok.Getter;
 
-public final class Framebuffer {
+public final class Framebuffer implements Destroyable {
 
 	public static Framebuffer DEFAULT = new Framebuffer(0);
 

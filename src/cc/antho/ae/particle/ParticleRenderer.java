@@ -82,7 +82,7 @@ public class ParticleRenderer {
 	public void destroy() {
 
 		model.destroy();
-		shader.destory();
+		shader.destroy();
 
 	}
 

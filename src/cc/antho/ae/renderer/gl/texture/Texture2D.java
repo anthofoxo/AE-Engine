@@ -10,7 +10,9 @@ import java.nio.ByteBuffer;
 
 import org.lwjgl.BufferUtils;
 
-public class Texture2D extends Texture {
+import cc.antho.ae.renderer.Destroyable;
+
+public class Texture2D extends Texture implements Destroyable {
 
 	public Texture2D(int handle) {
 
@@ -23,22 +25,15 @@ public class Texture2D extends Texture {
 		this(glGenTextures());
 		bind(0);
 
-		linearMipmap();
+		minLinearMipLinear();
+		magLinear();
 		clamp();
 
 	}
 
-	public void linearMipmap() {
+	public void maxLevel(int level) {
 
-		glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	}
-
-	public void linear() {
-
-		glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, level);
 
 	}
 
@@ -46,6 +41,54 @@ public class Texture2D extends Texture {
 
 		glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	}
+
+	public void minNear() {
+
+		glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+	}
+
+	public void minLinear() {
+
+		glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+	}
+
+	public void minLinearMipLinear() {
+
+		glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+	}
+
+	public void minLinearMipNear() {
+
+		glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+
+	}
+
+	public void minNearMipLinear() {
+
+		glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+
+	}
+
+	public void minNearMipNear() {
+
+		glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+
+	}
+
+	public void magNear() {
+
+		glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	}
+
+	public void magLinear() {
+
+		glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	}
 

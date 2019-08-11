@@ -1,7 +1,5 @@
 package cc.antho.ae.engine;
 
-import static org.lwjgl.opengl.GL11.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -128,7 +126,7 @@ public final class AEEngine extends GameLoopVariable implements EventListener {
 
 		uiMaster.render(window.getWidth(), window.getHeight());
 
-		glFinish();
+		// glFinish();
 		window.swapBuffers();
 		counter.addFrame();
 
