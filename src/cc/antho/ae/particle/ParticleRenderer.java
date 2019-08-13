@@ -10,8 +10,8 @@ import org.joml.Vector3f;
 
 import cc.antho.ae.camera.Camera;
 import cc.antho.ae.math.Maths;
+import cc.antho.ae.renderer.gl.GLRenderer;
 import cc.antho.ae.renderer.gl.GLShaderProgram;
-import cc.antho.ae.renderer.gl.GLShaderUtil;
 import cc.antho.ae.renderer.gl.model.Dataset;
 import cc.antho.ae.renderer.gl.model.RawModel;
 
@@ -22,12 +22,12 @@ public class ParticleRenderer {
 	private RawModel model;
 	private GLShaderProgram shader;
 
-	public ParticleRenderer() throws IOException {
+	public ParticleRenderer(GLRenderer renderer) throws IOException {
 
 		model = new RawModel(GL_TRIANGLE_STRIP);
 		model.uploadData(null, new Dataset(VERTS, 2));
 
-		shader = GLShaderUtil.createProgram("/shader/particle.vs", "/shader/particle.fs");
+		shader = renderer.createProgram("/shader/particle.vs", "/shader/particle.fs");
 
 	}
 

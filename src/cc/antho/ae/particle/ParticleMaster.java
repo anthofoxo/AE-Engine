@@ -6,15 +6,16 @@ import java.util.Iterator;
 import java.util.List;
 
 import cc.antho.ae.camera.Camera;
+import cc.antho.ae.renderer.gl.GLRenderer;
 
 public class ParticleMaster {
 
 	private static List<Particle> particles = new ArrayList<>();
 	private static ParticleRenderer renderer;
 
-	public static void init() throws IOException {
+	public static void init(GLRenderer renderer) throws IOException {
 
-		renderer = new ParticleRenderer();
+		ParticleMaster.renderer = new ParticleRenderer(renderer);
 
 	}
 
@@ -47,11 +48,11 @@ public class ParticleMaster {
 		renderer.destroy();
 
 	}
-	
+
 	public static void addParticle(Particle p) {
-		
+
 		particles.add(p);
-		
+
 	}
 
 }
