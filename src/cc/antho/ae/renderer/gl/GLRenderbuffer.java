@@ -1,23 +1,14 @@
-package cc.antho.ae.framebuffer;
+package cc.antho.ae.renderer.gl;
 
 import static org.lwjgl.opengl.GL30.*;
 
-import cc.antho.ae.renderer.Destroyable;
 import lombok.Getter;
 
-public final class Renderbuffer implements Destroyable {
-
-	public static Renderbuffer DEFAULT = new Renderbuffer(0);
-
-	private Renderbuffer(int id) {
-
-		this.handle = id;
-
-	}
+public final class GLRenderbuffer implements Bindable, Destroyable {
 
 	@Getter private int handle;
 
-	public Renderbuffer() {
+	GLRenderbuffer() {
 
 		handle = glGenRenderbuffers();
 		bind();
@@ -31,7 +22,7 @@ public final class Renderbuffer implements Destroyable {
 
 	}
 
-	public void storageMultisample(int samples, int internalFormat, int width, int height) {
+	public void storage(int samples, int internalFormat, int width, int height) {
 
 		bind();
 		glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, internalFormat, width, height);

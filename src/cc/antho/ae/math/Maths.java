@@ -49,6 +49,12 @@ public final class Maths {
 
 	}
 
+	public static Color mix(Color a, Color b, float percent) {
+
+		return new Color(mix(a.r, b.r, percent), mix(a.g, b.g, percent), mix(a.b, b.b, percent), mix(a.a, b.a, percent));
+
+	}
+
 	public static float mix(float a, float b, float percent) {
 
 		return a * (1f - percent) + b * percent;

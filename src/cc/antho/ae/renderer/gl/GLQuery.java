@@ -1,25 +1,24 @@
-package cc.antho.ae.renderer.gl.query;
+package cc.antho.ae.renderer.gl;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 
-import cc.antho.ae.renderer.Destroyable;
 import lombok.Getter;
 
-public class Query implements Destroyable {
+public class GLQuery implements Destroyable {
 
 	@Getter private int handle;
 	@Getter private int type;
 	@Getter private boolean using = false;
 
-	public Query(int handle, int type) {
+	GLQuery(int handle, int type) {
 
 		this.type = type;
 		this.handle = handle;
 
 	}
 
-	public Query(int type) {
+	GLQuery(int type) {
 
 		this(glGenQueries(), type);
 

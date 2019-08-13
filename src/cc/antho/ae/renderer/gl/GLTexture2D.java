@@ -1,4 +1,4 @@
-package cc.antho.ae.renderer.gl.texture;
+package cc.antho.ae.renderer.gl;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL12.*;
@@ -10,17 +10,15 @@ import java.nio.ByteBuffer;
 
 import org.lwjgl.BufferUtils;
 
-import cc.antho.ae.renderer.Destroyable;
+public class GLTexture2D extends GLTexture implements Destroyable {
 
-public class Texture2D extends Texture implements Destroyable {
-
-	public Texture2D(int handle) {
+	GLTexture2D(int handle) {
 
 		super(GL_TEXTURE_2D, handle);
 
 	}
 
-	public Texture2D() {
+	GLTexture2D() {
 
 		this(glGenTextures());
 		bind(0);

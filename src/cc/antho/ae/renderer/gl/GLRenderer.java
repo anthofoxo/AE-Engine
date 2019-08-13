@@ -1,10 +1,40 @@
-package cc.antho.ae.renderer;
+package cc.antho.ae.renderer.gl;
 
 import static org.lwjgl.opengl.GL11.*;
 
 import cc.antho.ae.renderer.color.Color;
 
-public class Renderer {
+public final class GLRenderer {
+
+	public GLRenderbuffer genRenderbuffer() {
+
+		return new GLRenderbuffer();
+
+	}
+
+	public GLFramebuffer genFramebuffer() {
+
+		return new GLFramebuffer();
+
+	}
+
+	public GLFramebuffer getDefaultFramebuffer() {
+
+		return new GLFramebuffer(0);
+
+	}
+
+	public GLTexture2D genTexture2D() {
+
+		return new GLTexture2D();
+
+	}
+
+	public GLQuery genQuery(int type) {
+
+		return new GLQuery(type);
+
+	}
 
 	public void clearColor(Color color) {
 
@@ -17,8 +47,6 @@ public class Renderer {
 		colorMask(flag, flag, flag, flag);
 
 	}
-
-	// GL
 
 	public void clearColor(float r, float g, float b, float a) {
 

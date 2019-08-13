@@ -1,25 +1,20 @@
-package cc.antho.ae.framebuffer;
+package cc.antho.ae.renderer.gl;
 
-import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL30.*;
 
-import cc.antho.ae.renderer.Destroyable;
-import cc.antho.ae.renderer.gl.texture.Texture2D;
 import lombok.Getter;
 
-public final class Framebuffer implements Destroyable {
+public final class GLFramebuffer implements Destroyable {
 
-	public static Framebuffer DEFAULT = new Framebuffer(0);
+	@Getter private int handle;
 
-	private Framebuffer(int id) {
+	GLFramebuffer(int id) {
 
 		this.handle = id;
 
 	}
 
-	@Getter private int handle;
-
-	public Framebuffer() {
+	GLFramebuffer() {
 
 		handle = glGenFramebuffers();
 		bindAll();
@@ -44,13 +39,13 @@ public final class Framebuffer implements Destroyable {
 
 	}
 
-	public void attach(Texture2D texture, int attachment) {
+	public void attach(GLTexture2D texture, int attachment) {
 
-		glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, GL_TEXTURE_2D, texture.getHandle(), 0);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, texture.getTarget(), texture.getHandle(), 0);
 
 	}
 
-	public void attach(Renderbuffer renderbuffer, int attachment) {
+	public void attach(GLRenderbuffer renderbuffer, int attachment) {
 
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, attachment, GL_RENDERBUFFER, renderbuffer.getHandle());
 
@@ -68,11 +63,9 @@ public final class Framebuffer implements Destroyable {
 
 	}
 
-	public void blit(Framebuffer dest, int srcX0, int srcY0, int srcX1, int srcY1, int dstX0, int dstY0, int dstX1, int dstY1, int mask, int filter) {
+	public void blit(GLFramebuffer dest, int srcX0, int srcY0, int srcX1, int srcY1, int dstX0, int dstY0, int dstX1, int dstY1, int mask, int filter) {
 
 		bindRead();
-		(dest == null ? DEFAULT : dest).bindDraw();
-
 		glBlitFramebuffer(srcX0, srcY0, srcX1, srcY1, dstX0, dstY0, dstX1, dstY1, mask, filter);
 
 	}

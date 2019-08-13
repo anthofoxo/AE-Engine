@@ -1,10 +1,10 @@
-package cc.antho.ae.renderer.gl.texture;
+package cc.antho.ae.renderer.gl;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public abstract class Texture {
+public abstract class GLTexture {
 
 	@Getter protected final int target;
 	@Getter protected final int handle;

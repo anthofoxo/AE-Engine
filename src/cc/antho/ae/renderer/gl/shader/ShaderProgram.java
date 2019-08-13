@@ -6,10 +6,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import org.joml.Vector4f;
 
-import cc.antho.ae.renderer.Destroyable;
 import cc.antho.ae.renderer.color.Color;
+import cc.antho.ae.renderer.gl.Destroyable;
 import lombok.Getter;
 
 public final class ShaderProgram implements Destroyable {
@@ -102,6 +103,18 @@ public final class ShaderProgram implements Destroyable {
 	public void uniform4f(String name, Vector4f v0) {
 
 		glUniform4f(getUniformLocation(name), v0.x, v0.y, v0.z, v0.w);
+
+	}
+
+	public void uniform3f(String name, Vector3f v0) {
+
+		uniform3f(name, v0.x, v0.y, v0.z);
+
+	}
+
+	public void uniform3f(String name, Color v0) {
+
+		uniform3f(name, v0.r, v0.g, v0.b);
 
 	}
 

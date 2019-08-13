@@ -8,7 +8,7 @@ import static org.lwjgl.opengl.GL30.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import cc.antho.ae.renderer.Destroyable;
+import cc.antho.ae.renderer.gl.Destroyable;
 import lombok.Getter;
 
 public final class RawModel implements Destroyable {
@@ -43,6 +43,7 @@ public final class RawModel implements Destroyable {
 
 	}
 
+	// TODO Allow reuse to prevent allocating more gl objects
 	public void uploadData(int[] indices, Dataset... datasets) {
 
 		datasets = parseNull(datasets);

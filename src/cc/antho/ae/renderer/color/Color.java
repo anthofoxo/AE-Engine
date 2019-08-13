@@ -62,4 +62,15 @@ public class Color {
 
 	}
 
+	public Color mul(float scalar) {
+
+		r *= scalar;
+		g *= scalar;
+		b *= scalar;
+		a *= scalar;
+
+		return this;
+
+	}
+
 }

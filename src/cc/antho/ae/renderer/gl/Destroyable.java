@@ -1,4 +1,4 @@
-package cc.antho.ae.renderer;
+package cc.antho.ae.renderer.gl;
 
 public interface Destroyable {
 
