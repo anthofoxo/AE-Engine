@@ -1,21 +1,21 @@
-package cc.antho.ae.renderer.gl.shader;
+package cc.antho.ae.renderer.gl;
 
 import static org.lwjgl.opengl.GL20.*;
 
 import lombok.Getter;
 
-public final class ShaderSource {
+public final class GLShaderSource implements Destroyable {
 
 	@Getter private int handle;
 
-	public ShaderSource(String source, int type) {
+	GLShaderSource(String source, int type) {
 
 		handle = glCreateShader(type);
 
 		glShaderSource(handle, source);
 		glCompileShader(handle);
 
-		ShaderUtil.checkError(false, handle, GL_COMPILE_STATUS);
+		GLShaderUtil.checkError(false, handle, GL_COMPILE_STATUS);
 
 	}
 

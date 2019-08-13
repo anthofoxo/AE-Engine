@@ -1,7 +1,11 @@
 package cc.antho.ae.renderer.gl;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL20.*;
 
+import java.io.IOException;
+
+import cc.antho.ae.common.Util;
 import cc.antho.ae.renderer.color.Color;
 
 public final class GLRenderer {
@@ -35,6 +39,40 @@ public final class GLRenderer {
 		return new GLQuery(type);
 
 	}
+
+	public GLShaderSource genShaderSource(String source, int type) {
+
+		return new GLShaderSource(source, type);
+
+	}
+
+	public GLShaderProgram genShaderProgram(GLShaderSource... sources) {
+
+		return new GLShaderProgram(sources);
+
+	}
+
+	public GLShaderProgram createProgramDirect(String vss, String fss) {
+
+		GLShaderSource vs = genShaderSource(vss, GL_VERTEX_SHADER);
+		GLShaderSource fs = genShaderSource(fss, GL_FRAGMENT_SHADER);
+
+		GLShaderProgram program = genShaderProgram(vs, fs);
+
+		vs.destroy();
+		fs.destroy();
+
+		return program;
+
+	}
+
+	public GLShaderProgram createProgram(String vss, String fss) throws IOException {
+
+		return createProgramDirect(Util.loadResourceToString(vss), Util.loadResourceToString(fss));
+
+	}
+
+	////
 
 	public void clearColor(Color color) {
 

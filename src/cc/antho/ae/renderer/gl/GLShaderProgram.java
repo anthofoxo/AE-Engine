@@ -1,4 +1,4 @@
-package cc.antho.ae.renderer.gl.shader;
+package cc.antho.ae.renderer.gl;
 
 import static org.lwjgl.opengl.GL20.*;
 
@@ -10,38 +10,29 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 import cc.antho.ae.renderer.color.Color;
-import cc.antho.ae.renderer.gl.Destroyable;
 import lombok.Getter;
 
-public final class ShaderProgram implements Destroyable {
-
-	public static final ShaderProgram DEFAULT = new ShaderProgram(0);
+public final class GLShaderProgram implements Destroyable {
 
 	@Getter private int handle;
 
 	private final Map<String, Integer> uniforms = new HashMap<>();
 	private final float[] m44 = new float[16];
 
-	public ShaderProgram(int handle) {
+	GLShaderProgram(GLShaderSource... sources) {
 
-		this.handle = handle;
+		this.handle = glCreateProgram();
 
-	}
-
-	public ShaderProgram(ShaderSource... sources) {
-
-		this(glCreateProgram());
-
-		for (ShaderSource source : sources)
+		for (GLShaderSource source : sources)
 			glAttachShader(handle, source.getHandle());
 
 		glLinkProgram(handle);
-		ShaderUtil.checkError(true, handle, GL_LINK_STATUS);
+		GLShaderUtil.checkError(true, handle, GL_LINK_STATUS);
 
 		glValidateProgram(handle);
-		ShaderUtil.checkError(true, handle, GL_VALIDATE_STATUS);
+		GLShaderUtil.checkError(true, handle, GL_VALIDATE_STATUS);
 
-		for (ShaderSource source : sources)
+		for (GLShaderSource source : sources)
 			glDetachShader(handle, source.getHandle());
 
 	}
