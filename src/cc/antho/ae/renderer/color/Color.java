@@ -24,6 +24,12 @@ public class Color {
 
 	}
 
+	public Color(int hex) {
+
+		set(((hex) & 0xFF0000) >> 16, ((hex) & 0xFF00) >> 8, ((hex) & 0xFF));
+
+	}
+
 	public Color(float r, float g, float b) {
 
 		set(r, g, b);
@@ -50,6 +56,14 @@ public class Color {
 		this.r = r;
 		this.g = g;
 		this.b = b;
+
+	}
+
+	public void set(int r, int g, int b) {
+
+		this.r = r / 255F;
+		this.g = g / 255F;
+		this.b = b / 255F;
 
 	}
 
