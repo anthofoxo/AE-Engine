@@ -3,9 +3,7 @@ package cc.antho.ae.input;
 import static org.lwjgl.glfw.GLFW.*;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.joml.Vector2f;
 
@@ -20,9 +18,6 @@ import lombok.Getter;
 
 public class InputManager implements EventListener {
 
-	@Getter private Set<Integer> buttons = new HashSet<>();
-	@Getter private Set<Integer> lastButtons = new HashSet<>();
-
 	@Getter private Vector2f lastRawCursorPosition = new Vector2f();
 	@Getter private Vector2f rawCursorPosition = new Vector2f();
 	@Getter private Vector2f diffCursorPosition = new Vector2f();
@@ -33,8 +28,6 @@ public class InputManager implements EventListener {
 
 		diffCursorPosition.set(rawCursorPosition).sub(lastRawCursorPosition);
 		lastRawCursorPosition.set(rawCursorPosition);
-		lastButtons.clear();
-		lastButtons.addAll(buttons);
 
 		for (Control control : controls)
 			control.last = control.isDown();
@@ -66,14 +59,20 @@ public class InputManager implements EventListener {
 	@EventHandler
 	public void onEventWindowMousePress(EventWindowMousePress event) {
 
-		buttons.add(event.getButton());
+		int button = event.getButton();
+
+		for (Control control : controls)
+			if (control.getTriggers().containsKey(button)) control.getTriggers().put(button, true);
 
 	}
 
 	@EventHandler
 	public void onEventWindowMouseRelease(EventWindowMouseRelease event) {
 
-		buttons.remove(event.getButton());
+		int button = event.getButton();
+
+		for (Control control : controls)
+			if (control.getTriggers().containsKey(button)) control.getTriggers().put(button, false);
 
 	}
 

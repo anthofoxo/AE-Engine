@@ -5,12 +5,15 @@ import java.util.Map;
 
 import lombok.Getter;
 
-public final class Control {
+public class Control {
 
 	@Getter private Map<Integer, Boolean> triggers = new HashMap<>();
 	@Getter boolean last = false;
+	@Getter boolean mouse;
 
-	public Control(int... triggers) {
+	public Control(boolean mouse, int... triggers) {
+
+		this.mouse = mouse;
 
 		for (int i : triggers)
 			this.triggers.put(i, false);
