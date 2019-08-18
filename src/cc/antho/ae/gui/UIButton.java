@@ -1,7 +1,5 @@
 package cc.antho.ae.gui;
 
-import org.lwjgl.glfw.GLFW;
-
 import cc.antho.ae.gui.UIText.HAlignment;
 import cc.antho.ae.gui.UIText.VAlignment;
 import cc.antho.ae.math.Maths;
@@ -60,7 +58,7 @@ public class UIButton extends UIComponent {
 
 		if (getBounds().contains(owner.getInput().getRawCursorPosition().x, owner.getInput().getRawCursorPosition().y) || focused) {
 
-			if (owner.getInput().getButtons().contains(GLFW.GLFW_MOUSE_BUTTON_LEFT)) {
+			if (owner.getInput().getMouseLeft().isDown()) {
 
 				owner.clearFocus();
 				focused = true;

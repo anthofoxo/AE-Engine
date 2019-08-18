@@ -24,6 +24,16 @@ public class InputManager implements EventListener {
 
 	@Getter private List<Control> controls = new ArrayList<>();
 
+	@Getter private Control mouseLeft = new MouseControl(GLFW_MOUSE_BUTTON_1);
+	@Getter private Control mouseRight = new MouseControl(GLFW_MOUSE_BUTTON_2);
+
+	public InputManager() {
+
+		controls.add(mouseLeft);
+		controls.add(mouseRight);
+
+	}
+
 	public void update() {
 
 		diffCursorPosition.set(rawCursorPosition).sub(lastRawCursorPosition);
