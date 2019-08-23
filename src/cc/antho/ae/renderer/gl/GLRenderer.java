@@ -72,8 +72,6 @@ public final class GLRenderer {
 
 	}
 
-	////
-
 	public void clearColor(Color color) {
 
 		clearColor(color.r, color.g, color.b, color.a);

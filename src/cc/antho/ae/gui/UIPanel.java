@@ -8,6 +8,7 @@ import cc.antho.ae.renderer.color.Color;
 import lombok.Getter;
 import lombok.Setter;
 
+@Deprecated
 public class UIPanel extends UIComponent {
 
 	@Getter @Setter private Color color = new Color(0F, 0F, 0F, .7F);

@@ -9,6 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
+@Deprecated
 public class UIFont {
 
 	private String face = "default";

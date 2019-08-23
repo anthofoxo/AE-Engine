@@ -10,6 +10,7 @@ import cc.antho.eventsystem.EventCallback;
 import lombok.Getter;
 import lombok.Setter;
 
+@Deprecated
 public class UIComponent {
 
 	@Getter @Setter protected Vector2f position = new Vector2f();

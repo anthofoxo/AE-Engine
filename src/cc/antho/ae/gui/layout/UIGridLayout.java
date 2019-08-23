@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
+@Deprecated
 public final class UIGridLayout implements UILayoutManager {
 
 	@Getter private final int w, h, gap;

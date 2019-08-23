@@ -14,6 +14,7 @@ import cc.antho.ae.gui.UIText.VAlignment;
 import cc.antho.ae.renderer.color.Color;
 import cc.antho.ae.renderer.color.Colors;
 
+@Deprecated
 public class UITextField extends UIComponent {
 
 	private Color background = new Color(1F, 1F, 1F);

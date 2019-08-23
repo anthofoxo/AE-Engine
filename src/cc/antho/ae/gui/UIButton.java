@@ -5,6 +5,7 @@ import cc.antho.ae.gui.UIText.VAlignment;
 import cc.antho.ae.math.Maths;
 import cc.antho.ae.renderer.color.Color;
 
+@Deprecated
 public class UIButton extends UIComponent {
 
 	private Color background = new Color(.9F, .9F, .9F);

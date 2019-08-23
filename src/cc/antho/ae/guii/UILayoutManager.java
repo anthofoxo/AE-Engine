@@ -1,8 +1,5 @@
-package cc.antho.ae.gui.layout;
+package cc.antho.ae.guii;
 
-import cc.antho.ae.gui.UIContainer;
-
-@Deprecated
 public interface UILayoutManager {
 
 	public void layout(UIContainer container);

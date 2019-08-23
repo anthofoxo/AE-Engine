@@ -1,5 +1,7 @@
 package cc.antho.ae.window;
 
+import org.joml.Vector2f;
+
 public abstract class Window {
 
 	public abstract int getWidth();
@@ -27,5 +29,11 @@ public abstract class Window {
 	public abstract void lockCursor();
 
 	public abstract void unlockCursor();
+
+	public Vector2f getSize() {
+
+		return new Vector2f(getWidth(), getHeight());
+
+	}
 
 }

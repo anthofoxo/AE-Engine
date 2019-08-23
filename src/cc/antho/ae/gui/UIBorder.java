@@ -8,6 +8,7 @@ import cc.antho.ae.renderer.color.Color;
 import lombok.Getter;
 import lombok.Setter;
 
+@Deprecated
 public class UIBorder {
 
 	@Getter @Setter private Color color = new Color(.7F, .7F, .7F);

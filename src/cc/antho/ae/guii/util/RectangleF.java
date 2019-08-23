@@ -1,4 +1,4 @@
-package cc.antho.ae.gui.util;
+package cc.antho.ae.guii.util;
 
 import org.joml.Vector2f;
 
@@ -7,7 +7,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Deprecated
 public class RectangleF {
 
 	private Vector2f position, size;

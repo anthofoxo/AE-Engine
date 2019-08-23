@@ -8,6 +8,7 @@ import cc.antho.ae.input.InputManager;
 import cc.antho.eventsystem.EventCallback;
 import lombok.Getter;
 
+@Deprecated
 public class UIContainer extends UIComponent {
 
 	@Getter private Map<UIComponent, Object> components = new HashMap<>();

@@ -28,6 +28,7 @@ import cc.antho.eventsystem.EventListener;
 import lombok.AccessLevel;
 import lombok.Getter;
 
+@Deprecated
 public class UIMaster implements EventListener {
 
 	@Getter private long handle;

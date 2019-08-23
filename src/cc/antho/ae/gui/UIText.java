@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor
+@Deprecated
 public class UIText extends UIComponent {
 
 	@Getter @Setter private Color color = new Color(1F, 1F, 1F);

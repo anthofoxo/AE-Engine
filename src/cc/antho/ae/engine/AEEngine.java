@@ -9,6 +9,7 @@ import cc.antho.ae.events.window.EventWindowClosed;
 import cc.antho.ae.gameloop.FrameCounter;
 import cc.antho.ae.gameloop.GameLoopVariable;
 import cc.antho.ae.gui.UIMaster;
+import cc.antho.ae.guii.UIContext;
 import cc.antho.ae.input.InputManager;
 import cc.antho.ae.log.Logger;
 import cc.antho.ae.renderer.gl.GLRenderer;
@@ -31,7 +32,9 @@ public final class AEEngine extends GameLoopVariable implements EventListener {
 	private List<EventCallback> deferred = new ArrayList<>();
 	private List<Timer> timers = new ArrayList<>();
 
-	@Getter private UIMaster uiMaster;
+	@Getter @Deprecated private UIMaster uiMaster;
+	public UIContext uiContext;
+
 	@Getter private InputManager inputManager;
 	@Getter private AudioManager audioManager;
 	@Getter private EventLayer layer;
@@ -58,6 +61,7 @@ public final class AEEngine extends GameLoopVariable implements EventListener {
 	public void init() {
 
 		uiMaster = new UIMaster(layer);
+
 		inputManager = new InputManager();
 		audioManager = new AudioManager(props.getSources());
 
@@ -125,6 +129,7 @@ public final class AEEngine extends GameLoopVariable implements EventListener {
 		manager.render();
 
 		uiMaster.render(window.getWidth(), window.getHeight());
+		if (uiContext != null) uiContext.render(window.getSize(), 1F);
 
 		// glFinish();
 		window.swapBuffers();
@@ -140,6 +145,7 @@ public final class AEEngine extends GameLoopVariable implements EventListener {
 		manager.setState(null);
 
 		uiMaster.destroy();
+		if (uiContext != null) uiContext.destroy();
 
 		window.destroy();
 

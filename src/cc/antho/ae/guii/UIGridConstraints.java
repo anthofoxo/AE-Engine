@@ -1,10 +1,9 @@
-package cc.antho.ae.gui.layout;
+package cc.antho.ae.guii;
 
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-@Deprecated
-public class UIGridConstraints {
+public final class UIGridConstraints {
 
 	public final int x, y, w, h;
 
