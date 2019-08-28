@@ -2,6 +2,7 @@ package cc.antho.ae.gameloop;
 
 import cc.antho.ae.time.TimeProvider;
 
+@Deprecated
 public abstract class GameLoopFixed extends GameLoop {
 
 	private double accumulator = 0D;
@@ -27,7 +28,8 @@ public abstract class GameLoopFixed extends GameLoop {
 		if (running) return;
 		running = true;
 
-		double currentTime = provider.getTime();
+		double lastTime = provider.getTime();
+		double newTime;
 
 		init();
 
@@ -35,9 +37,9 @@ public abstract class GameLoopFixed extends GameLoop {
 
 			int currentSteps = 0;
 
-			double newTime = provider.getTime();
-			double frameTime = newTime - currentTime;
-			currentTime = newTime;
+			newTime = provider.getTime();
+			double frameTime = newTime - lastTime;
+			lastTime = newTime;
 
 			accumulator += frameTime;
 

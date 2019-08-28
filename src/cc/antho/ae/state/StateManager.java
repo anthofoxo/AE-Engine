@@ -28,6 +28,12 @@ public final class StateManager {
 
 	}
 
+	public void fixedTick() {
+
+		if (scene != null) scene.fixedTick();
+
+	}
+
 	public void tick() {
 
 		if (scene != null) scene.tick();

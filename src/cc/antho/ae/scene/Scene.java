@@ -10,6 +10,8 @@ public abstract class Scene {
 
 	public abstract void init();
 
+	public abstract void fixedTick();
+
 	public abstract void tick();
 
 	public abstract void render();

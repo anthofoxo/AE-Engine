@@ -36,6 +36,13 @@ public final class SceneManager {
 
 	}
 
+	public void fixedTick() {
+
+		for (int i = scenes.size() - 1; i >= 0; i--)
+			scenes.get(i).fixedTick();
+
+	}
+
 	public void tick() {
 
 		for (int i = scenes.size() - 1; i >= 0; i--)

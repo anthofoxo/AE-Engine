@@ -2,6 +2,7 @@ package cc.antho.ae.gameloop;
 
 import cc.antho.ae.time.TimeProvider;
 
+@Deprecated
 public abstract class GameLoopVariable extends GameLoop {
 
 	public GameLoopVariable(TimeProvider provider) {

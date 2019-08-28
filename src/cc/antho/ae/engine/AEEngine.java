@@ -7,7 +7,7 @@ import cc.antho.ae.audio.AudioManager;
 import cc.antho.ae.common.Timer;
 import cc.antho.ae.events.window.EventWindowClosed;
 import cc.antho.ae.gameloop.FrameCounter;
-import cc.antho.ae.gameloop.GameLoopVariable;
+import cc.antho.ae.gameloop.GameLoopI;
 import cc.antho.ae.gui.UIContext;
 import cc.antho.ae.input.InputManager;
 import cc.antho.ae.log.Logger;
@@ -21,7 +21,7 @@ import cc.antho.eventsystem.EventListener;
 import lombok.Getter;
 import lombok.Setter;
 
-public final class AEEngine extends GameLoopVariable implements EventListener {
+public final class AEEngine extends GameLoopI implements EventListener {
 
 	@Getter private StateManager manager = new StateManager();
 	@Getter private FrameCounter counter = new FrameCounter();
@@ -49,7 +49,7 @@ public final class AEEngine extends GameLoopVariable implements EventListener {
 
 	public AEEngine(AEEngineStartProps props) {
 
-		super(props.getProvider());
+		super(props.getProvider(), 1D / 100D);
 
 		this.props = props;
 		layer = props.getLayer();
@@ -88,6 +88,12 @@ public final class AEEngine extends GameLoopVariable implements EventListener {
 
 	}
 
+	public void fixedTick() {
+
+		manager.fixedTick();
+
+	}
+
 	public void tick() {
 
 		while (!deferred.isEmpty())
@@ -96,7 +102,7 @@ public final class AEEngine extends GameLoopVariable implements EventListener {
 		for (int i = timers.size() - 1; i >= 0; i--) {
 
 			Timer timer = timers.get(i);
-			timer.setLeft(timer.getLeft() - delta);
+			timer.setLeft(timer.getLeft() - getDelta());
 
 			if (timer.getLeft() <= 0D) {
 

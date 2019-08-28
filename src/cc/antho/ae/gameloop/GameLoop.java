@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
+@Deprecated
 public abstract class GameLoop {
 
 	@Getter protected final TimeProvider provider;
