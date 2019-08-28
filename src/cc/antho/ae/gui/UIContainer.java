@@ -1,113 +1,91 @@
 package cc.antho.ae.gui;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
-import cc.antho.ae.gui.layout.UILayoutManager;
-import cc.antho.ae.input.InputManager;
-import cc.antho.eventsystem.EventCallback;
+import cc.antho.ae.events.window.EventWindowMouseMoved;
+import cc.antho.ae.events.window.EventWindowMousePress;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
-@Deprecated
-public class UIContainer extends UIComponent {
+@AllArgsConstructor
+public final class UIContainer extends UIComponent {
 
-	@Getter private Map<UIComponent, Object> components = new HashMap<>();
+	@Getter @Setter private UILayoutManager layout;
 
-	private UILayoutManager layout;
-
-	public UIContainer(UILayoutManager layout) {
-
-		setLayout(layout);
-
-		getClickCallbacks().add(objs -> {
-
-			InputManager input = ((UIMaster) objs[0]).getInput();
-
-			for (UIComponent component : components.keySet()) {
-
-				if (component.getBounds().contains(input.getRawCursorPosition().x, input.getRawCursorPosition().y)) {
-
-					for (EventCallback callback : component.getClickCallbacks())
-						callback.callback(objs);
-
-				}
-
-			}
-
-		});
-
-	}
-
-	public void onKeyPress(int key) {
-
-		for (UIComponent component : components.keySet())
-			if (component != null) component.onKeyPress(key);
-
-	}
-
-	public void onKeyRelease(int key) {
-
-		for (UIComponent component : components.keySet())
-			if (component != null) component.onKeyRelease(key);
-
-	}
-
-	public void onKeyRepeat(int key) {
-
-		for (UIComponent component : components.keySet())
-			if (component != null) component.onKeyRepeat(key);
-
-	}
-
-	public void onChar(char key) {
-
-		for (UIComponent component : components.keySet())
-			if (component != null) component.onChar(key);
-
-	}
-
-	public void setFocused(boolean focused) {
-
-		this.focused = false;
-
-		for (UIComponent component : components.keySet())
-			if (component != null) component.setFocused(false);
-
-	}
-
-	public void tick(UIMaster owner) {
-
-		layout();
-
-		for (UIComponent component : components.keySet())
-			if (component != null) component.tick(owner);
-
-	}
-
-	public void render(UIMaster owner) {
-
-		super.render(owner);
-
-		for (UIComponent component : components.keySet())
-			if (component != null) component.render(owner);
-
-	}
-
-	public void setLayout(UILayoutManager layout) {
-
-		this.layout = layout;
-
-	}
-
-	public void layout() {
-
-		if (layout != null) layout.layout(this);
-
-	}
+	@Getter(value = AccessLevel.PACKAGE) private final List<UIComponent> componentKeys = new ArrayList<>();
+	@Getter(value = AccessLevel.PACKAGE) private final List<Object> componentValues = new ArrayList<>();
 
 	public void add(UIComponent component, Object constraints) {
 
-		components.put(component, constraints);
+		if (componentKeys.contains(component)) return;
+
+		component.context(context);
+		componentKeys.add(component);
+		componentValues.add(constraints);
+
+	}
+
+	public void remove(UIComponent component) {
+
+		if (!componentKeys.contains(component)) return;
+
+		component.context(null);
+
+		int index = componentKeys.indexOf(component);
+
+		componentKeys.remove(index);
+		componentValues.remove(index);
+
+	}
+
+	protected void onEventWindowMouseMoved(EventWindowMouseMoved event) {
+
+		for (UIComponent component : componentKeys)
+			component._onEventWindowMouseMoved(event);
+
+	}
+
+	protected void onEventWindowMousePress(EventWindowMousePress event) {
+
+		for (UIComponent component : componentKeys)
+			component._onEventWindowMousePress(event);
+
+	}
+
+	void context(UIContext context) {
+
+		super.context(context);
+
+		for (UIComponent component : componentKeys)
+			component.context(context);
+
+	}
+
+	public void removeAll() {
+
+		for (UIComponent component : componentKeys)
+			component.context(null);
+
+		componentKeys.clear();
+		componentValues.clear();
+
+	}
+
+	public void render() {
+
+		if (layout != null) layout.layout(this);
+
+		for (UIComponent component : componentKeys)
+			component._render();
+
+	}
+
+	public List<UIComponent> contents() {
+
+		return componentKeys;
 
 	}
 

@@ -4,62 +4,59 @@ import static org.lwjgl.nanovg.NanoVG.*;
 
 import java.nio.ByteBuffer;
 
-import org.lwjgl.nanovg.NVGColor;
 import org.lwjgl.system.MemoryStack;
 
-import cc.antho.ae.renderer.color.Color;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+public  class UIText extends UIComponent {
 
-@NoArgsConstructor
-@Deprecated
-public class UIText extends UIComponent {
-
-	@Getter @Setter private Color color = new Color(1F, 1F, 1F);
-	private NVGColor internalColor = NVGColor.create();
-	@Getter @Setter private String text = "UIText";
-
-	@Getter @Setter HAlignment hAlign = HAlignment.LEFT;
-	@Getter @Setter VAlignment vAlign = VAlignment.TOP;
-
-	public enum HAlignment {
-
-		LEFT(NVG_ALIGN_LEFT), CENTER(NVG_ALIGN_CENTER), TOP(NVG_ALIGN_TOP);
-
-		int mask;
-
-		private HAlignment(int mask) {
-
-			this.mask = mask;
-
-		}
-
-	}
-
-	public enum VAlignment {
-
-		TOP(NVG_ALIGN_TOP), MIDDLE(NVG_ALIGN_MIDDLE), BOTTOM(NVG_ALIGN_BOTTOM);
-
-		int mask;
-
-		private VAlignment(int mask) {
-
-			this.mask = mask;
-
-		}
-
-	}
+	public String text;
+	public UIAlignment horzAlign = UIAlignment.CENTER;
+	public UIAlignment vertAlign = UIAlignment.MIDDLE;
+	public UIFont font = new UIFont();
 
 	public UIText(String text) {
 
-		setText(text);
+		this.text = text;
 
 	}
 
-	public void render(UIMaster owner) {
+	public void render() {
 
-		color.store(internalColor);
+		float x;
+		float y;
+
+		switch (horzAlign) {
+
+			case LEFT:
+				x = position.x;
+				break;
+			case CENTER:
+				x = position.x + size.x / 2F;
+				break;
+			case RIGHT:
+				x = position.x + size.x;
+				break;
+			default:
+				x = 0;
+				break;
+
+		}
+
+		switch (vertAlign) {
+
+			case TOP:
+				y = position.y;
+				break;
+			case MIDDLE:
+				y = position.y + size.y / 2F;
+				break;
+			case BOTTOM:
+				y = position.y + size.y;
+				break;
+			default:
+				y = 0;
+				break;
+
+		}
 
 		try (MemoryStack stack = MemoryStack.stackPush()) {
 
@@ -68,11 +65,11 @@ public class UIText extends UIComponent {
 
 			ByteBuffer buffer = stack.ASCII(t, false);
 
-			nvgFillColor(owner.getHandle(), internalColor);
-			nvgTextAlign(owner.getHandle(), hAlign.mask | vAlign.mask);
-			nvgFontSize(owner.getHandle(), font.getSize());
-			nvgFontFace(owner.getHandle(), font.getFace());
-			nvgText(owner.getHandle(), position.x, position.y, buffer);
+			nvgFillColor(context.handle, context.color(color));
+			nvgTextAlign(context.handle, horzAlign.mask | vertAlign.mask);
+			nvgFontSize(context.handle, font.size);
+			nvgFontFace(context.handle, font.face);
+			nvgText(context.handle, x, y, buffer);
 
 		}
 

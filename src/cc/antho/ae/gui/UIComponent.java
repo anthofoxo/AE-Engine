@@ -1,57 +1,64 @@
 package cc.antho.ae.gui;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.joml.Vector2f;
 
+import cc.antho.ae.events.window.EventWindowMouseMoved;
+import cc.antho.ae.events.window.EventWindowMousePress;
 import cc.antho.ae.gui.util.RectangleF;
-import cc.antho.eventsystem.EventCallback;
+import cc.antho.ae.renderer.color.Color;
+import cc.antho.ae.renderer.color.Colors;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-@Deprecated
-public class UIComponent {
+@RequiredArgsConstructor
+public abstract class UIComponent {
 
 	@Getter @Setter protected Vector2f position = new Vector2f();
 	@Getter @Setter protected Vector2f size = new Vector2f(100F);
-	@Getter @Setter protected boolean focused;
-	@Getter @Setter protected UIBorder border = new UIBorder();
-	@Getter @Setter protected boolean visible = true;
-	@Getter @Setter protected UIFont font = new UIFont();
+	@Getter @Setter protected Color color = new Color(Colors.WHITE);
+	@Getter @Setter private boolean visible = true;
 
-	@Getter private List<EventCallback> clickCallbacks = new ArrayList<>();
+	private boolean containsMouse = false;
 
-	public void tick(UIMaster owner) {
+	protected UIContext context;
 
-	}
+	void context(UIContext context) {
 
-	public void render(UIMaster owner) {
-
-		border.render(owner);
+		this.context = context;
 
 	}
 
-	public void onKeyPress(int key) {
+	final void _onEventWindowMouseMoved(EventWindowMouseMoved event) {
+
+		RectangleF rect = new RectangleF(position, size);
+		containsMouse = rect.contains(event.getX(), event.getY());
+
+		if (containsMouse) onEventWindowMouseMoved(event);
 
 	}
 
-	public void onKeyRelease(int key) {
+	protected void onEventWindowMouseMoved(EventWindowMouseMoved event) {
 
 	}
 
-	public void onKeyRepeat(int key) {
+	final void _onEventWindowMousePress(EventWindowMousePress event) {
+
+		if (containsMouse) onEventWindowMousePress(event);
 
 	}
 
-	public void onChar(char key) {
+	protected void onEventWindowMousePress(EventWindowMousePress event) {
 
 	}
 
-	public RectangleF getBounds() {
+	final void _render() {
 
-		return new RectangleF(position, size);
+		if (!visible) return;
+		render();
 
 	}
+
+	public abstract void render();
 
 }

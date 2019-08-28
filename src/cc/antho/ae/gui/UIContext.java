@@ -1,8 +1,9 @@
-package cc.antho.ae.guii;
+package cc.antho.ae.gui;
 
 import static org.lwjgl.nanovg.NanoVG.*;
 import static org.lwjgl.nanovg.NanoVGGL3.*;
 
+import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -70,6 +71,40 @@ public final class UIContext implements Destroyable, EventListener {
 
 	}
 
+	public int genTexture(BufferedImage image) {
+
+		int width = image.getWidth();
+		int height = image.getHeight();
+		ByteBuffer pixels = BufferUtils.createByteBuffer(width * height * 4);
+
+		for (int y = height - 1; y >= 0; y--)
+			for (int x = 0; x < width; x++) {
+
+				int pixel = image.getRGB(x, y);
+				int alpha = (pixel & 0xFF000000) >> 24;
+				int red = (pixel & 0x00FF0000) >> 16;
+				int green = (pixel & 0x0000FF00) >> 8;
+				int blue = pixel & 0x000000FF;
+
+				pixels.put((byte) red);
+				pixels.put((byte) green);
+				pixels.put((byte) blue);
+				pixels.put((byte) alpha);
+
+			}
+
+		pixels.flip();
+
+		return nvgCreateImageRGBA(handle, width, height, NVG_IMAGE_GENERATE_MIPMAPS, pixels);
+
+	}
+
+	public void deleteTexture(int texture) {
+
+		nvgDeleteImage(handle, texture);
+
+	}
+
 	public void render(Vector2f size, float ratio) {
 
 		render(size.x, size.y, ratio);
@@ -114,8 +149,8 @@ public final class UIContext implements Destroyable, EventListener {
 
 		if (container != null) {
 
-			container.removeAll();
 			container.context(null);
+			container.removeAll();
 
 		}
 

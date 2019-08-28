@@ -1,18 +1,13 @@
 package cc.antho.ae.gui;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-@Deprecated
-public class UIFont {
+public final class UIFont {
 
-	private String face = "default";
-	private float size = 15F;
+	public String face = "default";
+	public float size = 15F;
 
 }

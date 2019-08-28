@@ -1,4 +1,4 @@
-package cc.antho.ae.guii;
+package cc.antho.ae.gui;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

@@ -7,7 +7,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Deprecated
 public class RectangleF {
 
 	private Vector2f position, size;
