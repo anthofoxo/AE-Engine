@@ -39,9 +39,9 @@ public class GLTexture2D extends GLTexture implements Destroyable {
 
 	public void repeat() {
 
-		glTexParameteri(target, GL_TEXTURE_WRAP_R, GL_REPEAT);
 		glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(target, GL_TEXTURE_WRAP_R, GL_REPEAT);
 
 	}
 
@@ -95,9 +95,9 @@ public class GLTexture2D extends GLTexture implements Destroyable {
 
 	public void clamp() {
 
-		glTexParameteri(target, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 		glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(target, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
 	}
 
