@@ -3,7 +3,7 @@ package cc.antho.ae.math.builder;
 import java.util.ArrayList;
 import java.util.List;
 
-import cc.antho.ae.math.raw.RawInt;
+import cc.antho.rawdatatypes.RawInt;
 
 public class IntBuilder extends DataBuilder {
 

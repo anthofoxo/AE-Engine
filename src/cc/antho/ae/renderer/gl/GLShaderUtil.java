@@ -3,7 +3,6 @@ package cc.antho.ae.renderer.gl;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 
-import cc.antho.ae.common.Util;
 import cc.antho.ae.log.Logger;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -25,7 +24,6 @@ public final class GLShaderUtil {
 			if (program) error = glGetProgramInfoLog(handle);
 			else error = glGetShaderInfoLog(handle);
 
-			Util.openErrorDialog(new RuntimeException(error));
 			Logger.error(error);
 
 		}

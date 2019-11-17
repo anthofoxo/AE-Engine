@@ -7,11 +7,11 @@ import java.util.List;
 
 import org.joml.Vector2f;
 
-import cc.antho.ae.events.window.EventWindowKeyPress;
-import cc.antho.ae.events.window.EventWindowKeyRelease;
-import cc.antho.ae.events.window.EventWindowMouseMoved;
-import cc.antho.ae.events.window.EventWindowMousePress;
-import cc.antho.ae.events.window.EventWindowMouseRelease;
+import cc.antho.abstractwindow.event.window.input.keyboard.key.EventWindowKeyboardKeyPressed;
+import cc.antho.abstractwindow.event.window.input.keyboard.key.EventWindowKeyboardKeyReleased;
+import cc.antho.abstractwindow.event.window.input.mouse.EventWindowMouseMoved;
+import cc.antho.abstractwindow.event.window.input.mouse.button.EventWindowMouseButtonPressed;
+import cc.antho.abstractwindow.event.window.input.mouse.button.EventWindowMouseButtonReleased;
 import cc.antho.eventsystem.EventHandler;
 import cc.antho.eventsystem.EventListener;
 import lombok.Getter;
@@ -47,9 +47,9 @@ public class InputManager implements EventListener {
 	}
 
 	@EventHandler
-	public void onEventWindowKeyPress(EventWindowKeyPress event) {
+	public void onEventWindowKeyPress(EventWindowKeyboardKeyPressed event) {
 
-		int key = event.getKey();
+		int key = event.key;
 
 		for (Control control : controls)
 			if (control.getTriggers().containsKey(key)) control.getTriggers().put(key, true);
@@ -57,9 +57,9 @@ public class InputManager implements EventListener {
 	}
 
 	@EventHandler
-	public void onEventWindowKeyRelease(EventWindowKeyRelease event) {
+	public void onEventWindowKeyRelease(EventWindowKeyboardKeyReleased event) {
 
-		int key = event.getKey();
+		int key = event.key;
 
 		for (Control control : controls)
 			if (control.getTriggers().containsKey(key)) control.getTriggers().put(key, false);
@@ -67,9 +67,9 @@ public class InputManager implements EventListener {
 	}
 
 	@EventHandler
-	public void onEventWindowMousePress(EventWindowMousePress event) {
+	public void onEventWindowMousePress(EventWindowMouseButtonPressed event) {
 
-		int button = event.getButton();
+		int button = event.button;
 
 		for (Control control : controls)
 			if (control.getTriggers().containsKey(button)) control.getTriggers().put(button, true);
@@ -77,9 +77,9 @@ public class InputManager implements EventListener {
 	}
 
 	@EventHandler
-	public void onEventWindowMouseRelease(EventWindowMouseRelease event) {
+	public void onEventWindowMouseRelease(EventWindowMouseButtonReleased event) {
 
-		int button = event.getButton();
+		int button = event.button;
 
 		for (Control control : controls)
 			if (control.getTriggers().containsKey(button)) control.getTriggers().put(button, false);
@@ -89,8 +89,8 @@ public class InputManager implements EventListener {
 	@EventHandler
 	public void onEventWindowMouseMoved(EventWindowMouseMoved event) {
 
-		rawCursorPosition.x = event.getX();
-		rawCursorPosition.y = event.getY();
+		rawCursorPosition.x = event.x;
+		rawCursorPosition.y = event.y;
 
 	}
 

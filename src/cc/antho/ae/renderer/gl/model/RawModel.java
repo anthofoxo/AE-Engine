@@ -8,7 +8,7 @@ import static org.lwjgl.opengl.GL30.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import cc.antho.ae.renderer.gl.Destroyable;
+import cc.antho.ae.common.Destroyable;
 import lombok.Getter;
 
 public final class RawModel implements Destroyable {

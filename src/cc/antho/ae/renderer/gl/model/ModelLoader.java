@@ -23,7 +23,7 @@ public final class ModelLoader {
 	public static ModelData loadOBJ(final String file) throws IOException {
 
 		BufferedReader reader = null;
-		InputStream is = Util.class.getResourceAsStream(file);
+		InputStream is = Util.getStream(file);
 		InputStreamReader isr = new InputStreamReader(is);
 		reader = new BufferedReader(isr);
 

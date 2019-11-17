@@ -3,18 +3,17 @@ package cc.antho.ae.engine;
 import java.util.ArrayList;
 import java.util.List;
 
+import cc.antho.abstractwindow.Window;
+import cc.antho.abstractwindow.event.window.EventWindowClose;
 import cc.antho.ae.audio.AudioManager;
 import cc.antho.ae.common.Timer;
-import cc.antho.ae.events.window.EventWindowClosed;
 import cc.antho.ae.gameloop.FrameCounter;
 import cc.antho.ae.gameloop.GameLoopI;
-import cc.antho.ae.gui.UIContext;
+import cc.antho.ae.gui.GuiContext;
 import cc.antho.ae.input.InputManager;
 import cc.antho.ae.log.Logger;
 import cc.antho.ae.renderer.gl.GLRenderer;
 import cc.antho.ae.state.StateManager;
-import cc.antho.ae.window.Window;
-import cc.antho.eventsystem.EventCallback;
 import cc.antho.eventsystem.EventHandler;
 import cc.antho.eventsystem.EventLayer;
 import cc.antho.eventsystem.EventListener;
@@ -28,24 +27,17 @@ public final class AEEngine extends GameLoopI implements EventListener {
 
 	@Getter @Setter private Window window;
 
-	private List<EventCallback> deferred = new ArrayList<>();
+	private List<Runnable> deferred = new ArrayList<>();
 	private List<Timer> timers = new ArrayList<>();
-
-	public UIContext uiContext;
 
 	@Getter private InputManager inputManager;
 	@Getter private AudioManager audioManager;
 	@Getter private EventLayer layer;
 	@Getter private GLRenderer renderer = new GLRenderer();
 
+	@Getter private GuiContext guiContext;
+
 	private AEEngineStartProps props;
-
-	@EventHandler
-	private void onEventWindowClosed(EventWindowClosed event) {
-
-		if (event.getWindow().equals(window)) stop();
-
-	}
 
 	public AEEngine(AEEngineStartProps props) {
 
@@ -53,6 +45,13 @@ public final class AEEngine extends GameLoopI implements EventListener {
 
 		this.props = props;
 		layer = props.getLayer();
+
+	}
+
+	@EventHandler
+	private void onEventWindowClosed(EventWindowClose event) {
+
+		if (event.window == window) stop();
 
 	}
 
@@ -67,6 +66,9 @@ public final class AEEngine extends GameLoopI implements EventListener {
 		layer.registerEventListener(this);
 		layer.registerEventListener(inputManager);
 
+		guiContext = new GuiContext();
+		layer.registerEventListener(guiContext);
+
 	}
 
 	public void beginTimer(Timer timer) {
@@ -76,7 +78,7 @@ public final class AEEngine extends GameLoopI implements EventListener {
 
 	}
 
-	public void defer(EventCallback callback) {
+	public void defer(Runnable callback) {
 
 		deferred.add(callback);
 
@@ -97,7 +99,7 @@ public final class AEEngine extends GameLoopI implements EventListener {
 	public void tick() {
 
 		while (!deferred.isEmpty())
-			deferred.remove(0).callback();
+			deferred.remove(0).run();
 
 		for (int i = timers.size() - 1; i >= 0; i--) {
 
@@ -106,7 +108,7 @@ public final class AEEngine extends GameLoopI implements EventListener {
 
 			if (timer.getLeft() <= 0D) {
 
-				timer.getCallback().callback();
+				timer.getCallback().run();
 
 				if (timer.isRepeats()) timer.setLeft(timer.getLeft() + timer.getStart());
 				else timers.remove(i);
@@ -128,9 +130,8 @@ public final class AEEngine extends GameLoopI implements EventListener {
 
 		manager.render();
 
-		if (uiContext != null) uiContext.render(window.getSize(), 1F);
+		guiContext.render(window.getWidth(), window.getHeight());
 
-		// glFinish();
 		window.swapBuffers();
 		counter.addFrame();
 
@@ -138,12 +139,12 @@ public final class AEEngine extends GameLoopI implements EventListener {
 
 	public void destroy() {
 
+		layer.deregisterEventListener(guiContext);
+		
 		layer.deregisterEventListener(this);
 		layer.deregisterEventListener(inputManager);
 
 		manager.setState(null);
-
-		if (uiContext != null) uiContext.destroy();
 
 		window.destroy();
 

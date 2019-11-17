@@ -9,6 +9,7 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
+import cc.antho.ae.common.Destroyable;
 import cc.antho.ae.renderer.color.Color;
 import lombok.Getter;
 
@@ -19,7 +20,7 @@ public final class GLShaderProgram implements Destroyable {
 	private final Map<String, Integer> uniforms = new HashMap<>();
 	private final float[] m44 = new float[16];
 
-	GLShaderProgram(GLShaderSource... sources) {
+	public GLShaderProgram(GLShaderSource... sources) {
 
 		this.handle = glCreateProgram();
 

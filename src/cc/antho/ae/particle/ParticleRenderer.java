@@ -27,7 +27,7 @@ public class ParticleRenderer {
 		model = new RawModel(GL_TRIANGLE_STRIP);
 		model.uploadData(null, new Dataset(VERTS, 2));
 
-		shader = renderer.createProgram("/shader/particle.vs", "/shader/particle.fs");
+		shader = renderer.genProgram("/shader/particle.vs", "/shader/particle.fs");
 
 	}
 

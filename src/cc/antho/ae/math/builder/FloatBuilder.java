@@ -6,7 +6,7 @@ import java.util.List;
 import org.joml.Vector3f;
 
 import cc.antho.ae.math.Maths;
-import cc.antho.ae.math.raw.RawFloat;
+import cc.antho.rawdatatypes.RawFloat;
 
 public class FloatBuilder extends DataBuilder {
 

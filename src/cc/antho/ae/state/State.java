@@ -1,6 +1,5 @@
 package cc.antho.ae.state;
 
-import cc.antho.ae.scene.SceneManager;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;

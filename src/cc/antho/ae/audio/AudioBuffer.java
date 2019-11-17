@@ -14,6 +14,7 @@ import java.nio.ShortBuffer;
 import org.lwjgl.BufferUtils;
 
 import cc.antho.ae.common.Util;
+import cc.antho.ae.log.Logger;
 import lombok.Getter;
 
 public final class AudioBuffer {
@@ -31,7 +32,7 @@ public final class AudioBuffer {
 
 		try {
 
-			final InputStream stream = Util.getStream(file, true);
+			final InputStream stream = Util.getStream(file);
 			final byte[] data = Util.loadByteArray(stream);
 
 			buffer = BufferUtils.createByteBuffer(data.length);
@@ -40,7 +41,7 @@ public final class AudioBuffer {
 
 		} catch (final IOException e) {
 
-			Util.openErrorDialog(e);
+			e.printStackTrace();
 
 		}
 

@@ -1,6 +1,5 @@
 package cc.antho.ae.common;
 
-import cc.antho.eventsystem.EventCallback;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,9 +9,9 @@ public class Timer {
 	@Setter private double start;
 	@Setter private double left;
 	@Setter private boolean repeats;
-	private EventCallback callback;
+	private Runnable callback;
 
-	public Timer(double timeout, boolean repeats, EventCallback callback) {
+	public Timer(double timeout, boolean repeats, Runnable callback) {
 
 		start = timeout;
 		left = timeout;

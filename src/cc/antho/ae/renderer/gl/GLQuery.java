@@ -3,6 +3,7 @@ package cc.antho.ae.renderer.gl;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 
+import cc.antho.ae.common.Destroyable;
 import lombok.Getter;
 
 public class GLQuery implements Destroyable {

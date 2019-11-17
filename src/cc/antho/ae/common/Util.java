@@ -35,27 +35,10 @@ public final class Util {
 
 	}
 
-	public static final InputStream getStream(final String input, final boolean relative) throws FileNotFoundException {
+	public static final InputStream getStream(final String input) throws FileNotFoundException {
 
-		if (relative) return Util.class.getResourceAsStream(input);
+		if (input.startsWith("/")) return Util.class.getResourceAsStream(input);
 		return new FileInputStream(input);
-
-	}
-
-	public static boolean ensureSystemUI() {
-
-		try {
-
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-			JFrame.setDefaultLookAndFeelDecorated(true);
-			return true;
-
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-				| UnsupportedLookAndFeelException e) {
-
-			return false;
-
-		}
 
 	}
 
@@ -83,7 +66,7 @@ public final class Util {
 
 	public static String loadResourceToString(String file) throws IOException {
 
-		InputStream is = Util.class.getResourceAsStream(file);
+		InputStream is = getStream(file);
 		InputStreamReader isr = new InputStreamReader(is);
 		BufferedReader br = new BufferedReader(isr);
 		StringBuilder sb = new StringBuilder();
@@ -100,23 +83,11 @@ public final class Util {
 
 	}
 
-	public static void openErrorDialog(Throwable e) {
-
-		new Thread(() -> {
-
-			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, exceptionToString(e), "Error", JOptionPane.ERROR_MESSAGE);
-
-		}).start();
-
-	}
-
 	public static String exceptionToString(Throwable e) {
 
 		StringBuilder s = new StringBuilder();
 		boolean first = true;
 
-		// Moved out of inner loop to reduce allocations
 		String name, message;
 		StackTraceElement[] trace;
 

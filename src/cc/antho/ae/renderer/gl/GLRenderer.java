@@ -10,6 +10,20 @@ import cc.antho.ae.renderer.color.Color;
 
 public final class GLRenderer {
 
+	private GLFramebuffer defaultFramebuffer;
+
+	public GLRenderer() {
+
+		this(new GLFramebuffer(0));
+
+	}
+
+	public GLRenderer(GLFramebuffer defaultFramebuffer) {
+
+		this.defaultFramebuffer = defaultFramebuffer;
+
+	}
+
 	public GLRenderbuffer genRenderbuffer() {
 
 		return new GLRenderbuffer();
@@ -24,13 +38,19 @@ public final class GLRenderer {
 
 	public GLFramebuffer getDefaultFramebuffer() {
 
-		return new GLFramebuffer(0);
+		return defaultFramebuffer;
 
 	}
 
 	public GLTexture2D genTexture2D() {
 
 		return new GLTexture2D();
+
+	}
+
+	public GLTexture2D getDefaultTexture2D() {
+
+		return new GLTexture2D(0);
 
 	}
 
@@ -52,7 +72,7 @@ public final class GLRenderer {
 
 	}
 
-	public GLShaderProgram createProgramDirect(String vss, String fss) {
+	public GLShaderProgram genProgramDirect(String vss, String fss) {
 
 		GLShaderSource vs = genShaderSource(vss, GL_VERTEX_SHADER);
 		GLShaderSource fs = genShaderSource(fss, GL_FRAGMENT_SHADER);
@@ -66,9 +86,9 @@ public final class GLRenderer {
 
 	}
 
-	public GLShaderProgram createProgram(String vss, String fss) throws IOException {
+	public GLShaderProgram genProgram(String vss, String fss) throws IOException {
 
-		return createProgramDirect(Util.loadResourceToString(vss), Util.loadResourceToString(fss));
+		return genProgramDirect(Util.loadResourceToString(vss), Util.loadResourceToString(fss));
 
 	}
 
