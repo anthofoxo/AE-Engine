@@ -10,10 +10,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 public final class Util {
 

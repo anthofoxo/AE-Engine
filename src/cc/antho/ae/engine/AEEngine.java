@@ -9,7 +9,6 @@ import cc.antho.ae.audio.AudioManager;
 import cc.antho.ae.common.Timer;
 import cc.antho.ae.gameloop.FrameCounter;
 import cc.antho.ae.gameloop.GameLoopI;
-import cc.antho.ae.gui.GuiContext;
 import cc.antho.ae.input.InputManager;
 import cc.antho.ae.log.Logger;
 import cc.antho.ae.renderer.gl.GLRenderer;
@@ -19,6 +18,7 @@ import cc.antho.eventsystem.EventLayer;
 import cc.antho.eventsystem.EventListener;
 import lombok.Getter;
 import lombok.Setter;
+import lwjgui.LWJGUI;
 
 public final class AEEngine extends GameLoopI implements EventListener {
 
@@ -35,7 +35,7 @@ public final class AEEngine extends GameLoopI implements EventListener {
 	@Getter private EventLayer layer;
 	@Getter private GLRenderer renderer = new GLRenderer();
 
-	@Getter private GuiContext guiContext;
+	@Getter private lwjgui.scene.Window lwjguiWindow;
 
 	private AEEngineStartProps props;
 
@@ -66,8 +66,10 @@ public final class AEEngine extends GameLoopI implements EventListener {
 		layer.registerEventListener(this);
 		layer.registerEventListener(inputManager);
 
-		guiContext = new GuiContext();
-		layer.registerEventListener(guiContext);
+		// Initialize lwjgui for this window
+		lwjguiWindow = LWJGUI.initialize(this.window.getHandle());
+		lwjguiWindow.setWindowAutoClear(false);
+		lwjguiWindow.setWindowAutoDraw(false);
 
 	}
 
@@ -130,7 +132,7 @@ public final class AEEngine extends GameLoopI implements EventListener {
 
 		manager.render();
 
-		guiContext.render(window.getWidth(), window.getHeight());
+		LWJGUI.render();
 
 		window.swapBuffers();
 		counter.addFrame();
@@ -139,8 +141,6 @@ public final class AEEngine extends GameLoopI implements EventListener {
 
 	public void destroy() {
 
-		layer.deregisterEventListener(guiContext);
-		
 		layer.deregisterEventListener(this);
 		layer.deregisterEventListener(inputManager);
 
