@@ -22,13 +22,6 @@ import cc.antho.ae.renderer.gl.model.RawModel;
 import cc.antho.ae.state.State;
 import cc.antho.ae.time.GLFWTimeProvider;
 import cc.antho.eventsystem.EventLayer;
-import lwjgui.scene.control.Button;
-import lwjgui.scene.control.Menu;
-import lwjgui.scene.control.MenuBar;
-import lwjgui.scene.control.MenuItem;
-import lwjgui.scene.control.SeparatorMenuItem;
-import lwjgui.scene.control.SplitPane;
-import lwjgui.scene.control.ToolBar;
 import lwjgui.scene.layout.OpenGLPane;
 import lwjgui.scene.layout.VBox;
 
@@ -75,42 +68,12 @@ public class LightTest2D {
 		public void init() {
 
 			VBox background = new VBox();
-			MenuBar menuBar = new MenuBar();
-
-			{
-
-				Menu file = new Menu("File");
-				file.getItems().add(new MenuItem("New"));
-				file.getItems().add(new MenuItem("Open"));
-				file.getItems().add(new MenuItem("Save"));
-				file.getItems().add(new SeparatorMenuItem());
-				file.getItems().add(new MenuItem("Exit"));
-				menuBar.getItems().add(file);
-
-			}
-			background.getChildren().add(menuBar);
-
-			// Tool Bar
-			ToolBar toolBar = new ToolBar();
-			toolBar.getItems().add(new Button("New Asset"));
-			toolBar.getItems().add(new Button("New Asset Instance"));
-			background.getChildren().add(toolBar);
-
-			// Tab Pane
-			SplitPane tabPane = new SplitPane();
-			tabPane.setFillToParentHeight(true);
-			tabPane.setFillToParentWidth(true);
-			background.getChildren().add(tabPane);
-
-			tabPane.getItems().add(new VBox());
 
 			OpenGLPane gears = new OpenGLPane();
 			gears.setFillToParentHeight(true);
 			gears.setFillToParentWidth(true);
 
-			tabPane.getItems().add(gears);
-
-			tabPane.getItems().add(new VBox());
+			background.getChildren().add(gears);
 
 			// Set the scene
 			engine.getLwjgui().getScene().setRoot(background);
@@ -156,7 +119,7 @@ public class LightTest2D {
 				lightShader.bind();
 				lightShader.uniform1f("u_aspect", (float) context.getWidth() / (float) context.getHeight());
 				lightShader.uniform1f("u_grain", (float) engine.getTime() * 10f);
-				lightShader.uniform1f("u_grainSize", 1.0f);
+				lightShader.uniform1f("u_grainScale", 1.0f);
 				lightShader.uniform1f("u_stepSize", 0.002f);
 				lightShader.uniform4f("u_filterColor", 1, 1, 1, 1);
 
