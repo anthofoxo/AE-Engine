@@ -5,6 +5,13 @@ import java.util.List;
 
 import cc.antho.abstractwindow.Window;
 import cc.antho.abstractwindow.event.window.EventWindowClose;
+import cc.antho.abstractwindow.event.window.focus.EventWindowFocus;
+import cc.antho.abstractwindow.event.window.input.keyboard.EventWindowKeyboardChar;
+import cc.antho.abstractwindow.event.window.input.keyboard.key.EventWindowKeyboardKey;
+import cc.antho.abstractwindow.event.window.input.mouse.EventWindowMouseMoved;
+import cc.antho.abstractwindow.event.window.input.mouse.EventWindowMouseScrolled;
+import cc.antho.abstractwindow.event.window.input.mouse.button.EventWindowMouseButton;
+import cc.antho.abstractwindow.event.window.resize.EventWindowResized;
 import cc.antho.ae.audio.AudioManager;
 import cc.antho.ae.common.Timer;
 import cc.antho.ae.gameloop.FrameCounter;
@@ -16,6 +23,7 @@ import cc.antho.ae.state.StateManager;
 import cc.antho.eventsystem.EventHandler;
 import cc.antho.eventsystem.EventLayer;
 import cc.antho.eventsystem.EventListener;
+import cc.antho.eventsystem.EventPriority;
 import lombok.Getter;
 import lombok.Setter;
 import lwjgui.LWJGUI;
@@ -35,7 +43,7 @@ public final class AEEngine extends GameLoopI implements EventListener {
 	@Getter private EventLayer layer;
 	@Getter private GLRenderer renderer = new GLRenderer();
 
-	@Getter private lwjgui.scene.Window lwjguiWindow;
+	@Getter private lwjgui.scene.Window lwjgui;
 
 	private AEEngineStartProps props;
 
@@ -48,10 +56,60 @@ public final class AEEngine extends GameLoopI implements EventListener {
 
 	}
 
-	@EventHandler
-	private void onEventWindowClosed(EventWindowClose event) {
+	@EventHandler(priority = EventPriority.HIGH)
+	private void glfwWindowCloseCallback(EventWindowClose event) {
 
+		lwjgui.glfwWindowCloseCallback(event.window.getHandle());
 		if (event.window == window) stop();
+
+	}
+
+	@EventHandler(priority = EventPriority.HIGH)
+	private void glfwCursorPosCallback(EventWindowMouseMoved event) {
+
+		lwjgui.glfwCursorPosCallback(event.window.getHandle(), event.x, event.y);
+
+	}
+
+	@EventHandler(priority = EventPriority.HIGH)
+	private void glfwCharCallback(EventWindowKeyboardChar event) {
+
+		lwjgui.glfwCharCallback(event.window.getHandle(), event.codepoint);
+
+	}
+
+	@EventHandler(priority = EventPriority.HIGH)
+	private void glfwKeyCallback(EventWindowKeyboardKey event) {
+
+		lwjgui.glfwKeyCallback(event.window.getHandle(), event.key, event.scancode, event.action, event.mods);
+
+	}
+
+	@EventHandler(priority = EventPriority.HIGH)
+	private void glfwMouseButtonCallback(EventWindowMouseButton event) {
+
+		lwjgui.glfwMouseButtonCallback(event.window.getHandle(), event.button, event.action, event.mods);
+
+	}
+
+	@EventHandler(priority = EventPriority.HIGH)
+	private void glfwWindowFocusCallback(EventWindowFocus event) {
+
+		lwjgui.glfwWindowFocusCallback(event.window.getHandle(), event.focused);
+
+	}
+
+	@EventHandler(priority = EventPriority.HIGH)
+	private void glfwWindowSizeCallback(EventWindowResized event) {
+
+		lwjgui.glfwWindowSizeCallback(event.window.getHandle(), event.w, event.h);
+
+	}
+
+	@EventHandler(priority = EventPriority.HIGH)
+	private void glfwScrollCallback(EventWindowMouseScrolled event) {
+
+		lwjgui.glfwScrollCallback(event.window.getHandle(), event.x, event.y);
 
 	}
 
@@ -67,9 +125,11 @@ public final class AEEngine extends GameLoopI implements EventListener {
 		layer.registerEventListener(inputManager);
 
 		// Initialize lwjgui for this window
-		lwjguiWindow = LWJGUI.initialize(this.window.getHandle());
-		lwjguiWindow.setWindowAutoClear(false);
-		lwjguiWindow.setWindowAutoDraw(false);
+		lwjgui = LWJGUI.initialize(this.window.getHandle(), false);
+		lwjgui.setWindowAutoClear(false);
+		lwjgui.setWindowAutoDraw(false);
+		lwjgui.setCanUserClose(false);
+		lwjgui.setAutoDestroy(false);
 
 	}
 
