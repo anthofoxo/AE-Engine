@@ -13,7 +13,6 @@ import cc.antho.ae.engine.AEEngine;
 import cc.antho.ae.engine.AEEngineStartProps;
 import cc.antho.ae.log.Logger;
 import cc.antho.ae.log.LoggerImpl;
-import cc.antho.ae.math.Maths;
 import cc.antho.ae.math.RNG;
 import cc.antho.ae.renderer.gl.GLShaderProgram;
 import cc.antho.ae.renderer.gl.GLTexture2D;
@@ -107,8 +106,8 @@ public class LightTest2D {
 
 			gears.setRendererCallback(context -> {
 
-				float mx = Maths.map((float) context.getMouseX(), (float) gears.getX(), (float) gears.getX() + (float) gears.getWidth(), 0, 1);
-				float my = Maths.map((float) context.getMouseY(), (float) gears.getY(), (float) gears.getY() + (float) gears.getHeight(), 1, 0);
+				float mx = (float) context.getLocalX(gears);
+				float my = (float) context.getLocalY(gears);
 
 				glClearColor(0, 0, 0, 1);
 				glClear(GL_COLOR_BUFFER_BIT);

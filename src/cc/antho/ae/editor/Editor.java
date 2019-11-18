@@ -69,12 +69,15 @@ public class Editor {
 
 			{
 
+				MenuItem exit = new MenuItem("Exit");
+				exit.setOnAction(e -> engine.stop());
+
 				Menu file = new Menu("File");
 				file.getItems().add(new MenuItem("New"));
 				file.getItems().add(new MenuItem("Open"));
 				file.getItems().add(new MenuItem("Save"));
 				file.getItems().add(new SeparatorMenuItem());
-				file.getItems().add(new MenuItem("Exit"));
+				file.getItems().add(exit);
 				menuBar.getItems().add(file);
 
 			}
@@ -83,9 +86,9 @@ public class Editor {
 			ColorPicker picker = new ColorPicker(new Color(r, g, b));
 			picker.setOnAction(e -> {
 
-				r = picker.getColor().getRed() / 255f;
-				g = picker.getColor().getGreen() / 255f;
-				b = picker.getColor().getBlue() / 255f;
+				r = picker.getColor().getRedF();
+				g = picker.getColor().getGreenF();
+				b = picker.getColor().getBlueF();
 
 			});
 
@@ -118,12 +121,7 @@ public class Editor {
 
 			gears.setRendererCallback(context -> {
 
-				// float mx = Maths.map((float) context.getMouseX(), (float) gears.getX(),
-				// (float) gears.getX() + (float) gears.getWidth(), 0, 1);
-				// float my = Maths.map((float) context.getMouseY(), (float) gears.getY(),
-				// (float) gears.getY() + (float) gears.getHeight(), 1, 0);
-
-				glClearColor(0, 0, 0, 1);
+				glClearColor(r, g, b, 1f);
 				glClear(GL_COLOR_BUFFER_BIT);
 
 			});
