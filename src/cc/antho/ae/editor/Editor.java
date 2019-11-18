@@ -7,9 +7,13 @@ import static org.lwjgl.util.tinyfd.TinyFileDialogs.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
@@ -20,12 +24,16 @@ import cc.antho.ae.engine.AEEngine;
 import cc.antho.ae.engine.AEEngineStartProps;
 import cc.antho.ae.log.Logger;
 import cc.antho.ae.log.LoggerImpl;
+import cc.antho.ae.renderer.color.Colors;
+import cc.antho.ae.renderer.gl.GLShaderProgram;
 import cc.antho.ae.renderer.gl.model.ModelData;
 import cc.antho.ae.renderer.gl.model.ModelLoader;
 import cc.antho.ae.renderer.gl.model.RawModel;
 import cc.antho.ae.state.State;
 import cc.antho.ae.time.GLFWTimeProvider;
 import cc.antho.eventsystem.EventLayer;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lwjgui.geometry.Insets;
 import lwjgui.geometry.Pos;
 import lwjgui.scene.Context;
@@ -38,7 +46,9 @@ import lwjgui.scene.control.MenuItem;
 import lwjgui.scene.control.PopupWindow;
 import lwjgui.scene.control.SeparatorMenuItem;
 import lwjgui.scene.control.SplitPane;
+import lwjgui.scene.control.TextField;
 import lwjgui.scene.control.ToolBar;
+import lwjgui.scene.layout.HBox;
 import lwjgui.scene.layout.OpenGLPane;
 import lwjgui.scene.layout.StackPane;
 import lwjgui.scene.layout.VBox;
@@ -49,8 +59,31 @@ public class Editor {
 	private AEEngine engine;
 
 	private Menu assetMenu;
-	private Map<String, RawModel> assets = new HashMap<>();
+	private VBox sceneGraph;
+	private VBox entityProperties;
+	private Map<String, Asset> assets = new HashMap<>();
+	private Map<Asset, List<AssetInstance>> instances = new HashMap<>();
 	private float r = .7f, g = .8f, b = .9f;
+	private GLShaderProgram basicShader;
+	private OpenGLPane gameView;
+
+	@AllArgsConstructor
+	@Getter
+	static class Asset {
+
+		private RawModel model;
+		private String id;
+
+	}
+
+	@AllArgsConstructor
+	@Getter
+	static class AssetInstance {
+
+		private Asset asset;
+		private Vector3f positon;
+
+	}
 
 	public static void main(String[] args) {
 
@@ -169,7 +202,77 @@ public class Editor {
 
 	private void createAssetInstance(String key) {
 
-		// TODO create asset instance
+		Asset asset = assets.get(key);
+		AssetInstance instance = new AssetInstance(asset, new Vector3f());
+
+		if (!instances.containsKey(asset)) instances.put(asset, new ArrayList<>());
+
+		instances.get(asset).add(instance);
+
+		Button button = new Button(key);
+		sceneGraph.getChildren().add(button);
+
+		button.setOnAction(e -> {
+
+			entityProperties.getChildren().clear();
+
+			HBox positionX = new HBox();
+			HBox positionY = new HBox();
+			HBox positionZ = new HBox();
+			entityProperties.getChildren().add(new Label("Position"));
+			entityProperties.getChildren().add(positionX);
+			entityProperties.getChildren().add(positionY);
+			entityProperties.getChildren().add(positionZ);
+
+			positionX.getChildren().add(new Label("X: "));
+			positionY.getChildren().add(new Label("Y: "));
+			positionZ.getChildren().add(new Label("Z: "));
+
+			TextField fieldX = new TextField(instance.getPositon().x + "");
+			TextField fieldY = new TextField(instance.getPositon().y + "");
+			TextField fieldZ = new TextField(instance.getPositon().z + "");
+
+			positionX.getChildren().add(fieldX);
+			positionY.getChildren().add(fieldY);
+			positionZ.getChildren().add(fieldZ);
+
+			fieldX.setOnTextChange(e2 -> {
+
+				try {
+
+					instance.getPositon().x = Float.parseFloat(fieldX.getText());
+
+				} catch (NumberFormatException e3) {
+
+				}
+
+			});
+
+			fieldY.setOnTextChange(e2 -> {
+
+				try {
+
+					instance.getPositon().y = Float.parseFloat(fieldY.getText());
+
+				} catch (NumberFormatException e3) {
+
+				}
+
+			});
+
+			fieldZ.setOnTextChange(e2 -> {
+
+				try {
+
+					instance.getPositon().z = Float.parseFloat(fieldZ.getText());
+
+				} catch (NumberFormatException e3) {
+
+				}
+
+			});
+
+		});
 
 	}
 
@@ -190,7 +293,7 @@ public class Editor {
 			button.setOnAction(e -> createAssetInstance(file));
 			assetMenu.getItems().add(button);
 
-			assets.put(file, model);
+			assets.put(file, new Asset(model, file));
 
 		} catch (IOException e) {
 
@@ -218,14 +321,33 @@ public class Editor {
 
 			{
 
+				MenuItem newItem = new MenuItem("New");
+				newItem.setOnAction(e -> {
+
+					for (Asset value : assets.values())
+						value.getModel().destroy();
+
+					assets.clear();
+
+					instances.clear();
+					sceneGraph.getChildren().clear();
+
+					MenuItem keep = assetMenu.getItems().get(0);
+					assetMenu.getItems().clear();
+					assetMenu.getItems().add(keep);
+
+					entityProperties.getChildren().clear();
+
+				});
+
 				MenuItem exit = new MenuItem("Exit");
 				exit.setOnAction(e -> engine.stop());
 
 				Menu file = new Menu("File");
-				// TODO file.getItems().add(new MenuItem("New"));
+				file.getItems().add(newItem);
 				// TODO file.getItems().add(new MenuItem("Open"));
 				// TODO file.getItems().add(new MenuItem("Save"));
-				// TODO file.getItems().add(new SeparatorMenuItem());
+				file.getItems().add(new SeparatorMenuItem());
 				file.getItems().add(exit);
 				menuBar.getItems().add(file);
 
@@ -296,15 +418,27 @@ public class Editor {
 			splitPane.setFillToParentWidth(true);
 			background.getChildren().add(splitPane);
 
-			// TODO tabPane.getItems().add(new VBox());
+			sceneGraph = new VBox();
+			splitPane.getItems().add(sceneGraph);
 
-			OpenGLPane gameView = new OpenGLPane();
+			gameView = new OpenGLPane();
 			gameView.setFillToParentHeight(true);
 			gameView.setFillToParentWidth(true);
 			gameView.setRendererCallback(context -> renderScene(context));
 			splitPane.getItems().add(gameView);
 
-			// TODO tabPane.getItems().add(new VBox());
+			entityProperties = new VBox();
+			splitPane.getItems().add(entityProperties);
+
+			try {
+
+				basicShader = engine.getRenderer().genProgram("/shaders/basic.vert", "/shaders/basic.frag");
+
+			} catch (IOException e) {
+
+				e.printStackTrace();
+
+			}
 
 		}
 
@@ -324,10 +458,12 @@ public class Editor {
 
 		public void destroy() {
 
-			for (RawModel value : assets.values())
-				value.destroy();
+			for (Asset value : assets.values())
+				value.getModel().destroy();
 
 			assets.clear();
+
+			basicShader.destroy();
 
 		}
 
@@ -336,7 +472,28 @@ public class Editor {
 	public void renderScene(Context context) {
 
 		glClearColor(r, g, b, 1f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		basicShader.bind();
+		basicShader.uniform3f("u_color", Colors.WHITE);
+		basicShader.uniformMat4f("u_view", new Matrix4f());
+		basicShader.uniformMat4f("u_projection", new Matrix4f().setPerspective(70f, (float) gameView.getWidth() / (float) gameView.getHeight(), 0.1f, 1000f));
+
+		for (Asset asset : instances.keySet()) {
+
+			asset.model.bind();
+
+			for (AssetInstance instance : instances.get(asset)) {
+
+				Matrix4f matrix = new Matrix4f();
+				matrix.translate(instance.getPositon());
+				basicShader.uniformMat4f("u_model", matrix);
+
+				asset.model.render();
+
+			}
+
+		}
 
 	}
 
