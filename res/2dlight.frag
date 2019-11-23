@@ -94,7 +94,7 @@ void main() {
 	if(maxDistanceNormalized > u_lightSize) inShadow = true;
 
 	// Spot lights, we take a dot product of the target direction and the current light beam
-	if(!inShadow && u_angle > -1.0 && -dot(direction, normalize(u_direction)) < u_angle) inShadow = true;
+	if(!inShadow && u_angle > -1.0 && acos(dot(direction, normalize(u_direction))) / 1.5708 > u_angle) inShadow = true;
 
 	// After determining spot lights we set the direction to match the step size
 	direction *= u_stepSize;

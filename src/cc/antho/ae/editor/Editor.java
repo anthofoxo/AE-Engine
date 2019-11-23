@@ -6,7 +6,6 @@ import static org.lwjgl.util.tinyfd.TinyFileDialogs.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,9 +35,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lwjgui.geometry.Insets;
 import lwjgui.geometry.Pos;
+import lwjgui.paint.Color;
 import lwjgui.scene.Context;
 import lwjgui.scene.Node;
 import lwjgui.scene.control.Button;
+import lwjgui.scene.control.ColorPicker;
 import lwjgui.scene.control.Label;
 import lwjgui.scene.control.Menu;
 import lwjgui.scene.control.MenuBar;
@@ -366,44 +367,20 @@ public class Editor {
 
 			background.getChildren().add(menuBar);
 
-			// TODO Use gui solution when bugs are fixed
-//			ColorPicker picker = new ColorPicker(new Color(r, g, b));
-//			
-//			picker.setOnAction(e -> {
-//
-//				r = picker.getColor().getRedF();
-//				g = picker.getColor().getGreenF();
-//				b = picker.getColor().getBlueF();
-//
-//			});
+			ColorPicker picker = new ColorPicker(new Color(r, g, b));
+
+			picker.setOnAction(e -> {
+
+				r = picker.getColor().getRedF();
+				g = picker.getColor().getGreenF();
+				b = picker.getColor().getBlueF();
+
+			});
 
 			ToolBar toolBar = new ToolBar();
 			background.getChildren().add(toolBar);
 
-			Button picker = new Button("Set Clear Color");
 			toolBar.getItems().add(picker);
-			picker.setOnAction(e -> {
-
-				try (MemoryStack stack = stackPush()) {
-
-					ByteBuffer color = stack.malloc(3);
-
-					color.put((byte) (r * 255f));
-					color.put((byte) (g * 255f));
-					color.put((byte) (b * 255f));
-					color.flip();
-
-					if (tinyfd_colorChooser("Set Clear Color", null, color, color) != null) {
-
-						r = (color.get() & 0xFF) / 255f;
-						g = (color.get() & 0xFF) / 255f;
-						b = (color.get() & 0xFF) / 255f;
-
-					}
-
-				}
-
-			});
 
 			Button newAssetButton = new Button("Create New Asset");
 			newAssetButton.setOnAction(e -> createAssetGui(newAssetButton));

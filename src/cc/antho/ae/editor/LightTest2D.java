@@ -106,8 +106,8 @@ public class LightTest2D {
 
 			gears.setRendererCallback(context -> {
 
-				float mx = (float) context.getLocalX(gears);
-				float my = (float) context.getLocalY(gears);
+				float mx = (float) context.getLocalX();
+				float my = (float) context.getLocalY();
 
 				glClearColor(0, 0, 0, 1);
 				glClear(GL_COLOR_BUFFER_BIT);
@@ -116,7 +116,9 @@ public class LightTest2D {
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
 				lightShader.bind();
+				lightShader.uniform1f("u_angle", -1.0f);
 				lightShader.uniform1f("u_aspect", (float) context.getWidth() / (float) context.getHeight());
+				lightShader.uniform1f("u_aspect", 1.0f);
 				lightShader.uniform1f("u_grain", (float) engine.getTime() * 10f);
 				lightShader.uniform1f("u_grainScale", 1.0f);
 				lightShader.uniform1f("u_stepSize", 0.002f);
@@ -135,6 +137,8 @@ public class LightTest2D {
 				lightShader.uniform3f("u_lightColor", RNG.nextFloat(0.4f, 0.8f), 1f, 0f);
 				screenQuad.render();
 
+				lightShader.uniform1f("u_angle", 0.5f);
+				lightShader.uniform2f("u_direction", (float) context.getLocalX() - 0.1f, (float) context.getLocalY() - 0.4f);
 				lightShader.uniform1f("u_lightSize", 0.4f);
 				lightShader.uniform2f("u_lightPosition", 0.1f, 0.4f);
 				lightShader.uniform3f("u_lightColor", 0f, 0f, 1f);
