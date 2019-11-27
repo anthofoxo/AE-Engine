@@ -4,6 +4,7 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.util.tinyfd.TinyFileDialogs.*;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,12 +20,14 @@ import org.lwjgl.system.MemoryStack;
 
 import cc.antho.abstractwindow.GLContext;
 import cc.antho.abstractwindow.GlfwWindow;
+import cc.antho.ae.common.Util;
 import cc.antho.ae.engine.AEEngine;
 import cc.antho.ae.engine.AEEngineStartProps;
 import cc.antho.ae.log.Logger;
 import cc.antho.ae.log.LoggerImpl;
 import cc.antho.ae.renderer.color.Colors;
 import cc.antho.ae.renderer.gl.GLShaderProgram;
+import cc.antho.ae.renderer.gl.GLTexture2D;
 import cc.antho.ae.renderer.gl.model.ModelData;
 import cc.antho.ae.renderer.gl.model.ModelLoader;
 import cc.antho.ae.renderer.gl.model.RawModel;
@@ -39,6 +42,7 @@ import lwjgui.paint.Color;
 import lwjgui.scene.Context;
 import lwjgui.scene.Node;
 import lwjgui.scene.control.Button;
+import lwjgui.scene.control.CheckBox;
 import lwjgui.scene.control.ColorPicker;
 import lwjgui.scene.control.Label;
 import lwjgui.scene.control.Menu;
@@ -73,7 +77,16 @@ public class Editor {
 	static class Asset {
 
 		private RawModel model;
+		private GLTexture2D texture;
+		private boolean cullFaces;
 		private String id;
+
+		void destroy() {
+
+			model.destroy();
+			texture.destroy();
+
+		}
 
 	}
 
@@ -162,9 +175,10 @@ public class Editor {
 				background.setPadding(new Insets(4));
 				this.getChildren().add(background);
 
-				String[] input = new String[1];
+				String[] input = new String[2];
 
 				Label label = new Label("null");
+				Label label2 = new Label("null");
 
 				Button modelButton = new Button("Open Model");
 				background.getChildren().add(modelButton);
@@ -186,11 +200,37 @@ public class Editor {
 
 				background.getChildren().add(label);
 
+				Button textureButton = new Button("Open Texture");
+				background.getChildren().add(textureButton);
+				textureButton.setOnAction(e2 -> {
+
+					try (MemoryStack stack = stackPush()) {
+
+						String path = new File("./res").getAbsolutePath() + "/";
+						PointerBuffer aFilterPatterns = stack.mallocPointer(2);
+						aFilterPatterns.put(stack.UTF8("*.png"));
+						aFilterPatterns.put(stack.UTF8("*.jpg"));
+						aFilterPatterns.flip();
+
+						input[1] = tinyfd_openFileDialog("Open Texture", path, aFilterPatterns, "Textures (*.png, *.jpg)", false);
+						if (input[1] != null) label2.setText(input[1]);
+
+					}
+
+				});
+
+				background.getChildren().add(label2);
+
+				CheckBox cullFaces = new CheckBox("Cull Faces");
+				cullFaces.setChecked(true);
+
+				background.getChildren().add(cullFaces);
+
 				Button createButton = new Button("Finish");
 				background.getChildren().add(createButton);
 				createButton.setOnAction(e2 -> {
 
-					if (input[0] != null) createAsset(input[0]);
+					if (input[0] != null && input[1] != null) createAsset(input[0], input[1], cullFaces.isChecked());
 					this.close();
 
 				});
@@ -277,7 +317,7 @@ public class Editor {
 
 	}
 
-	private void createAsset(String file) {
+	private void createAsset(String file, String texture, boolean cullFaces) {
 
 		if (assets.containsKey(file)) return;
 
@@ -286,7 +326,11 @@ public class Editor {
 			ModelData data = ModelLoader.loadOBJ(file);
 
 			RawModel model = new RawModel(GL_TRIANGLES);
-			model.uploadData(data.getIndices(), data.getPositions3());
+			model.uploadData(data.getIndices(), data.getPositions3(), data.getTextures2(), data.getNormals3());
+
+			BufferedImage rawTexture = Util.loadResourceToImage(texture);
+			GLTexture2D glTexture = engine.getRenderer().genTexture2D();
+			glTexture.storage(rawTexture);
 
 			if (assetMenu.getItems().size() == 1) assetMenu.getItems().add(new SeparatorMenuItem());
 
@@ -294,7 +338,7 @@ public class Editor {
 			button.setOnAction(e -> createAssetInstance(file));
 			assetMenu.getItems().add(button);
 
-			assets.put(file, new Asset(model, file));
+			assets.put(file, new Asset(model, glTexture, cullFaces, file));
 
 		} catch (IOException e) {
 
@@ -409,7 +453,7 @@ public class Editor {
 
 			try {
 
-				basicShader = engine.getRenderer().genProgram("/shaders/basic.vert", "/shaders/basic.frag");
+				basicShader = engine.getRenderer().genProgram("/shaders/flat.vert", "/shaders/flat.frag");
 
 			} catch (IOException e) {
 
@@ -436,7 +480,7 @@ public class Editor {
 		public void destroy() {
 
 			for (Asset value : assets.values())
-				value.getModel().destroy();
+				value.destroy();
 
 			assets.clear();
 
@@ -451,6 +495,9 @@ public class Editor {
 		glClearColor(r, g, b, 1f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		glEnable(GL_DEPTH_TEST);
+		glCullFace(GL_BACK);
+
 		basicShader.bind();
 		basicShader.uniform3f("u_color", Colors.WHITE);
 		basicShader.uniformMat4f("u_view", new Matrix4f());
@@ -459,6 +506,10 @@ public class Editor {
 		for (Asset asset : instances.keySet()) {
 
 			asset.model.bind();
+			asset.texture.bind(0);
+
+			if (asset.cullFaces) glEnable(GL_CULL_FACE);
+			else glDisable(GL_CULL_FACE);
 
 			for (AssetInstance instance : instances.get(asset)) {
 

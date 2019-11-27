@@ -40,7 +40,7 @@ public final class Util {
 
 	public static BufferedImage loadResourceToImage(String file) throws IOException {
 
-		InputStream is = Util.class.getResourceAsStream(file);
+		InputStream is = getStream(file);
 
 		BufferedImage image = ImageIO.read(is);
 		image.flush();
