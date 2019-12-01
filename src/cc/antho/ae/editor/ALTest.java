@@ -14,6 +14,7 @@ import cc.antho.ae.audio.AudioSettings;
 import cc.antho.ae.audio.AudioSource;
 import cc.antho.ae.audio.effect.AudioEffect;
 import cc.antho.ae.audio.effect.AudioEffectDistort;
+import cc.antho.ae.audio.effect.AudioEffectReverb;
 import cc.antho.ae.audio.effect.AudioEffectSlot;
 import cc.antho.ae.audio.effect.AudioFilter;
 import cc.antho.ae.audio.effect.AudioFilterLowpass;
@@ -24,34 +25,22 @@ public class ALTest {
 	private static AudioSource source;
 
 	private static AudioEffectSlot slot;
-	private static AudioEffectDistort effect;
+	private static AudioEffectReverb effect;
 
 	static void init(AudioManager mgr) {
 
-		effect = new AudioEffectDistort();
-		effect.setEdge(.7f);
-		effect.setGain(.3f);
+		effect = new AudioEffectReverb();
 
 		slot = new AudioEffectSlot();
 		slot.setEffect(effect);
 
 		filter = new AudioFilterLowpass();
 		filter.setFreqGain(1f);
-		filter.setHighFreqGain(0f);
+		filter.setHighFreqGain(.01f);
 
 		source = mgr.play(new AudioBuffer("/music/meat_boy.ogg"), AudioSettings.generate2DLooped());
 		source.setDirectFilter(filter);
-		source.setAuxSend(0, null, filter);
-		source.setPitch(.6f);
-
-//		effect = alGenEffects();
-//		alEffecti(effect, AL_EFFECT_TYPE, AL_EFFECT_REVERB);
-//		alEffectf(effect, AL_REVERB_DECAY_TIME, 5f);
-//		alEffecti(effect, AL_EFFECT_TYPE, AL_EFFECT_REVERB);
-//		alEffectf(effect, AL_REVERB_DENSITY, 0.4f);
-//		alEffectf(effect, AL_REVERB_DIFFUSION, .1f);
-//		alEffectf(effect, AL_REVERB_GAIN, .4f);
-//		alEffectf(effect, AL_REVERB_DECAY_TIME, 5f);
+		source.setAuxSend(0, slot, filter);
 
 	}
 
