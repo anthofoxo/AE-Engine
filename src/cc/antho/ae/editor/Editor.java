@@ -467,6 +467,8 @@ public class Editor {
 
 			}
 
+			// ALTest.init(engine.getAudioManager());
+
 		}
 
 		public void tick() {
@@ -481,6 +483,8 @@ public class Editor {
 
 			glClear(GL_COLOR_BUFFER_BIT);
 
+			// ALTest.render();
+
 		}
 
 		public void destroy() {
@@ -491,6 +495,8 @@ public class Editor {
 			assets.clear();
 
 			basicShader.destroy();
+
+			// ALTest.destroy();
 
 		}
 

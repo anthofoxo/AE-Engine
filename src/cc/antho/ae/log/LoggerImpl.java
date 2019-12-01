@@ -1,9 +1,5 @@
 package cc.antho.ae.log;
 
-import javax.swing.JOptionPane;
-
-import cc.antho.ae.common.Util;
-
 public class LoggerImpl extends Logger {
 
 	public void _warn(final String s) {
@@ -16,7 +12,7 @@ public class LoggerImpl extends Logger {
 
 		System.err.println("[" + Thread.currentThread().getName() + "][error]: " + s);
 
-		JOptionPane.showMessageDialog(null, Util.exceptionToString(new RuntimeException()));
+		throw new RuntimeException();
 
 	}
 
