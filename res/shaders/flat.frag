@@ -17,6 +17,6 @@ void main() {
 	vec3 toLight = vec3(0.0, 1.0, 0.0);
 	float product = max(dot(toLight, normalize(v_normal)), 0.2);
 
-	out_color = vec4(color.rgb * product, 1.0);
+	out_color = vec4(color.rgb/* * product*/, 1.0);
 
 }

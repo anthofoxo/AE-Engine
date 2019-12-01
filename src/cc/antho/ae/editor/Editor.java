@@ -26,6 +26,8 @@ import cc.antho.ae.engine.AEEngineStartProps;
 import cc.antho.ae.log.Logger;
 import cc.antho.ae.log.LoggerImpl;
 import cc.antho.ae.renderer.color.Colors;
+import cc.antho.ae.renderer.gl.GLFramebuffer;
+import cc.antho.ae.renderer.gl.GLRenderbuffer;
 import cc.antho.ae.renderer.gl.GLShaderProgram;
 import cc.antho.ae.renderer.gl.GLTexture2D;
 import cc.antho.ae.renderer.gl.model.ModelData;
@@ -66,11 +68,16 @@ public class Editor {
 	private Menu assetMenu;
 	private VBox sceneGraph;
 	private VBox entityProperties;
-	private Map<String, Asset> assets = new HashMap<>();
-	private Map<Asset, List<AssetInstance>> instances = new HashMap<>();
+	public Map<String, Asset> assets = new HashMap<>();
+	public Map<Asset, List<AssetInstance>> instances = new HashMap<>();
 	private float r = .7f, g = .8f, b = .9f;
 	private GLShaderProgram basicShader;
 	private OpenGLPane gameView;
+
+	private GLFramebuffer framebuffer;
+	private GLRenderbuffer depth_buffer;
+	private GLTexture2D albedo_buffer;
+	private GLTexture2D normal_buffer;
 
 	@AllArgsConstructor
 	@Getter
@@ -107,7 +114,6 @@ public class Editor {
 
 	private Editor() {
 
-		System.setProperty("java.awt.headless", Boolean.TRUE.toString());
 		Logger.logger = new LoggerImpl();
 
 		EventLayer layer = new EventLayer();
