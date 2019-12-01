@@ -3,81 +3,34 @@ package cc.antho.ae.audio;
 import static org.lwjgl.openal.AL10.*;
 import static org.lwjgl.openal.ALC10.*;
 
-import java.util.HashMap;
-import java.util.Map;
+import org.joml.Vector3f;
 
-import org.lwjgl.openal.AL;
-import org.lwjgl.openal.ALC;
-import org.lwjgl.openal.ALCCapabilities;
-import org.lwjgl.openal.ALCapabilities;
-
-import cc.antho.ae.log.Logger;
 import lombok.Getter;
 
 public final class AudioManager {
 
-	private float gain = 1f;
+	@Getter private float gain = 1f;
 
-	@Getter private long device, context;
+	@Getter private AudioDevice device;
+	@Getter private AudioContext context;
 
 	private AudioSource[] sources;
 
-	private Map<String, String> bufferRegisterMap = new HashMap<>();
-	private Map<String, AudioBuffer> bufferMap = new HashMap<>();
+	public AudioManager(int maxSources) {
 
-	public void registerBufferMapping(String key, String value) {
+		device = new AudioDevice(alcGetString(0, ALC_DEFAULT_DEVICE_SPECIFIER));
+		context = new AudioContext(device);
 
-		if (value == null) {
-
-			bufferRegisterMap.remove(key);
-			bufferMap.remove(key).destroy();
-
-		} else {
-
-			bufferRegisterMap.put(key, value);
-			bufferMap.put(key, new AudioBuffer(value));
-
-		}
+		createSources(maxSources);
 
 	}
 
-	public AudioManager(int numSources) {
+	private void createSources(int maxSources) {
 
-		sources = new AudioSource[numSources];
+		sources = new AudioSource[maxSources];
 
-		createAudioDevice();
-		createAudioContext();
-		createSources();
-
-		Logger.info("Initialized OpenAL");
-
-	}
-
-	private void createAudioDevice() {
-
-		final String defaultDeviceName = alcGetString(0, ALC_DEFAULT_DEVICE_SPECIFIER);
-		device = alcOpenDevice(defaultDeviceName);
-
-	}
-
-	private void createAudioContext() {
-
-		final int[] attributes = { 0 };
-		context = alcCreateContext(device, attributes);
-		alcMakeContextCurrent(context);
-
-		final ALCCapabilities alcCapabilities = ALC.createCapabilities(device);
-		final ALCapabilities alCapabilities = AL.createCapabilities(alcCapabilities);
-
-		if (!alCapabilities.OpenAL10) Logger.error("OpenAL 1.0 is not supported");
-		if (!alCapabilities.OpenAL11) Logger.error("OpenAL 1.1 is not supported");
-
-	}
-
-	private void createSources() {
-
-		for (int i = 0; i < sources.length; i++)
-			sources[i] = new AudioSource(this);
+		for (int i = 0; i < this.sources.length; i++)
+			sources[i] = new AudioSource(this, AudioSettings.generate3D(new Vector3f()));
 
 	}
 
@@ -86,23 +39,16 @@ public final class AudioManager {
 		for (int i = 0; i < sources.length; i++)
 			sources[i].destroy();
 
-	}
-
-	public AudioSource playAudio(String buffer, AudioSettings settings) {
-
-		if (buffer == null) return null;
-
-		return playAudio(bufferMap.get(buffer), settings);
+		sources = null;
 
 	}
 
-	public AudioSource playAudio(AudioBuffer buffer, AudioSettings settings) {
+	public AudioSource play(AudioBuffer buffer, AudioSettings settings) {
 
 		for (int i = 0; i < sources.length; i++) {
 
 			AudioSource source = sources[i];
-
-			if (!source.isPlaying()) return playAudio(buffer, settings, source);
+			if (!source.isPlaying()) return play(source, buffer, settings);
 
 		}
 
@@ -110,7 +56,7 @@ public final class AudioManager {
 
 	}
 
-	private AudioSource playAudio(AudioBuffer buffer, AudioSettings settings, AudioSource source) {
+	public AudioSource play(AudioSource source, AudioBuffer buffer, AudioSettings settings) {
 
 		source.set(settings);
 		source.setBuffer(buffer);
@@ -120,15 +66,15 @@ public final class AudioManager {
 
 	}
 
-	void update(final AudioSource source) {
+	void update(AudioSource source) {
 
 		alSourcef(source.getHandle(), AL_GAIN, gain * source.getGain());
 
 	}
 
-	public final void setGain(final float p) {
+	public void setGain(float gain) {
 
-		gain = p;
+		this.gain = gain;
 
 		for (int i = 0; i < sources.length; i++)
 			update(sources[i]);
@@ -142,26 +88,16 @@ public final class AudioManager {
 
 	}
 
-	public final float getGain() {
-
-		return gain;
-
-	}
-
 	public final void destroy() {
 
 		stopAll();
 		destroySources();
 
-		for (AudioBuffer buffer : bufferMap.values())
-			buffer.destroy();
+		context.destroy();
+		context = null;
 
-		bufferMap.clear();
-		bufferRegisterMap.clear();
-
-		alcDestroyContext(context);
-		alcCloseDevice(device);
-		Logger.info("Terminated OpenAL");
+		device.destroy();
+		device = null;
 
 	}
 
@@ -169,8 +105,8 @@ public final class AudioManager {
 
 		int count = 0;
 
-		for (AudioSource source : sources)
-			if (source.isPlaying()) count++;
+		for (int i = 0; i < sources.length; i++)
+			if (sources[i].isPlaying()) count++;
 
 		return count;
 

@@ -15,6 +15,7 @@ import java.util.Map;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.PointerBuffer;
+import org.lwjgl.openal.AL10;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 
@@ -467,6 +468,8 @@ public class Editor {
 
 			}
 
+			ALTest.init(engine.getAudioManager());
+
 		}
 
 		public void tick() {
@@ -481,6 +484,8 @@ public class Editor {
 
 			glClear(GL_COLOR_BUFFER_BIT);
 
+			ALTest.render();
+
 		}
 
 		public void destroy() {
@@ -491,6 +496,8 @@ public class Editor {
 			assets.clear();
 
 			basicShader.destroy();
+
+			ALTest.destroy();
 
 		}
 

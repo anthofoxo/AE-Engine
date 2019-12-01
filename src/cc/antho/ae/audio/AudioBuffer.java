@@ -6,69 +6,76 @@ import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.libc.LibCStdlib.*;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 
 import org.lwjgl.BufferUtils;
+import org.lwjgl.system.MemoryStack;
 
 import cc.antho.ae.common.Util;
+import cc.antho.ae.log.Logger;
 import lombok.Getter;
 
 public final class AudioBuffer {
 
-	@Getter private final int handle;
+	@Getter private int handle;
 
-	AudioBuffer(final String file) {
+	public AudioBuffer(String file) {
 
-		stackPush();
-		final IntBuffer channelsBuffer = stackMallocInt(1);
-		stackPush();
-		final IntBuffer sampleRateBuffer = stackMallocInt(1);
+		Logger.debug("Creating audio buffer");
 
-		ByteBuffer buffer = null;
+		ShortBuffer audioBuffer;
+		int format = -1;
+		int channels;
+		int sampleRate;
 
-		try {
+		try (MemoryStack stack = stackPush()) {
 
-			final InputStream stream = Util.getStream(file);
-			final byte[] data = Util.loadByteArray(stream);
+			IntBuffer channelsBuffer = stack.mallocInt(1);
+			IntBuffer sampleRateBuffer = stack.mallocInt(1);
 
-			buffer = BufferUtils.createByteBuffer(data.length);
-			buffer.put(data);
-			buffer.flip();
+			ByteBuffer buffer = null;
 
-		} catch (final IOException e) {
+			try {
 
-			e.printStackTrace();
+				Logger.info("Loading audio file: " + file);
+
+				byte[] data = Util.loadByteArray(Util.getStream(file));
+
+				buffer = BufferUtils.createByteBuffer(data.length);
+				buffer.put(data);
+				buffer.flip();
+
+			} catch (IOException e) {
+
+				e.printStackTrace();
+
+			}
+
+			Logger.info("Decoding audio file: " + file);
+			audioBuffer = stb_vorbis_decode_memory(buffer, channelsBuffer, sampleRateBuffer);
+
+			channels = channelsBuffer.get();
+			sampleRate = sampleRateBuffer.get();
 
 		}
 
-		final ShortBuffer rawAudioBuffer = stb_vorbis_decode_memory(buffer, channelsBuffer, sampleRateBuffer);
-
-		final int channels = channelsBuffer.get();
-		final int sampleRate = sampleRateBuffer.get();
-
-		stackPop();
-		stackPop();
-
-		int format;
-
 		if (channels == 1) format = AL_FORMAT_MONO16;
 		else if (channels == 2) format = AL_FORMAT_STEREO16;
-		else format = -1;
 
 		handle = alGenBuffers();
-
-		alBufferData(handle, format, rawAudioBuffer, sampleRate);
-
-		free(rawAudioBuffer);
+		alBufferData(handle, format, audioBuffer, sampleRate);
+		free(audioBuffer);
 
 	}
 
 	public void destroy() {
 
+		Logger.debug("Destroying audio buffer");
+
 		alDeleteBuffers(handle);
+		handle = 0;
 
 	}
 

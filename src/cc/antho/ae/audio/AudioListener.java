@@ -7,45 +7,43 @@ import org.joml.Vector3f;
 
 import cc.antho.ae.camera.Camera;
 
-public class AudioListener {
+public final class AudioListener {
 
 	private AudioListener() {
 
 	}
-	
+
 	static {
-		
+
 		alDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
-		
+
 	}
 
-	public static final void setPosition(final Vector3f position) {
+	public static void setPosition(Vector3f position) {
 
 		alListener3f(AL_POSITION, position.x, position.y, position.z);
 
 	}
 
-	public static final void setVelocity(final Vector3f position) {
+	public static void setVelocity(Vector3f position) {
 
 		alListener3f(AL_VELOCITY, position.x, position.y, position.z);
 
 	}
 
-	public static final void setOrientation(final Vector3f look, final Vector3f up) {
+	public static void setOrientation(Vector3f look, Vector3f up) {
 
 		alListenerfv(AL_ORIENTATION, new float[] { look.x, look.y, look.z, up.x, up.y, up.z });
 
 	}
 
-	public static final void setPositionAndOrientation(final Camera camera) {
+	public static void setPositionAndOrientation(Camera camera) {
+
+		Matrix4f view = camera.getViewMatrix();
+		Vector3f look = new Vector3f(view.m01(), view.m02(), view.m03());
+		Vector3f up = new Vector3f(view.m11(), view.m12(), view.m13());
 
 		setPosition(camera.getPosition());
-
-		final Matrix4f view = camera.getViewMatrix();
-
-		final Vector3f look = new Vector3f(view.m01(), view.m02(), view.m03());
-		final Vector3f up = new Vector3f(view.m11(), view.m12(), view.m13());
-
 		setOrientation(look, up);
 
 	}
