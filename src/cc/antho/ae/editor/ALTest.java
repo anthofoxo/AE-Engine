@@ -1,22 +1,11 @@
 package cc.antho.ae.editor;
 
-import static org.lwjgl.openal.AL10.*;
-import static org.lwjgl.openal.AL11.*;
-import static org.lwjgl.openal.ALC.*;
-import static org.lwjgl.openal.ALC10.*;
-import static org.lwjgl.openal.ALC11.*;
-import static org.lwjgl.openal.AL.*;
-import static org.lwjgl.openal.EXTEfx.*;
-
 import cc.antho.ae.audio.AudioBuffer;
 import cc.antho.ae.audio.AudioManager;
 import cc.antho.ae.audio.AudioSettings;
 import cc.antho.ae.audio.AudioSource;
-import cc.antho.ae.audio.effect.AudioEffect;
-import cc.antho.ae.audio.effect.AudioEffectDistort;
 import cc.antho.ae.audio.effect.AudioEffectReverb;
 import cc.antho.ae.audio.effect.AudioEffectSlot;
-import cc.antho.ae.audio.effect.AudioFilter;
 import cc.antho.ae.audio.effect.AudioFilterLowpass;
 
 public class ALTest {
