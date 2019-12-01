@@ -6,10 +6,11 @@ import static org.lwjgl.openal.EXTEfx.*;
 import org.lwjgl.openal.ALC;
 import org.lwjgl.openal.ALCCapabilities;
 
+import cc.antho.ae.common.Destroyable;
 import cc.antho.ae.log.Logger;
 import lombok.Getter;
 
-public final class AudioDevice {
+public final class AudioDevice implements Destroyable {
 
 	@Getter private String name;
 	@Getter private long handle;

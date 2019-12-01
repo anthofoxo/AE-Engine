@@ -5,10 +5,11 @@ import static org.lwjgl.openal.EXTEfx.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import cc.antho.ae.common.Destroyable;
 import cc.antho.ae.log.Logger;
 import lombok.Getter;
 
-public abstract class AudioEffect {
+public abstract class AudioEffect implements Destroyable {
 
 	@Getter protected int handle;
 	@Getter private final int type;

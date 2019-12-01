@@ -5,9 +5,10 @@ import static org.lwjgl.openal.ALC10.*;
 
 import org.joml.Vector3f;
 
+import cc.antho.ae.common.Destroyable;
 import lombok.Getter;
 
-public final class AudioManager {
+public final class AudioManager implements Destroyable {
 
 	@Getter private float gain = 1f;
 

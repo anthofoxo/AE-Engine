@@ -8,11 +8,12 @@ import org.joml.Vector3f;
 
 import cc.antho.ae.audio.effect.AudioEffectSlot;
 import cc.antho.ae.audio.effect.AudioFilter;
+import cc.antho.ae.common.Destroyable;
 import cc.antho.ae.log.Logger;
 import lombok.Getter;
 
 @Getter
-public final class AudioSource {
+public final class AudioSource implements Destroyable {
 
 	private int handle;
 	private float gain = 1f;

@@ -9,10 +9,11 @@ import org.lwjgl.openal.AL;
 import org.lwjgl.openal.ALCapabilities;
 import org.lwjgl.system.MemoryStack;
 
+import cc.antho.ae.common.Destroyable;
 import cc.antho.ae.log.Logger;
 import lombok.Getter;
 
-public final class AudioContext {
+public final class AudioContext implements Destroyable {
 
 	@Getter private AudioDevice device;
 	@Getter private long handle;

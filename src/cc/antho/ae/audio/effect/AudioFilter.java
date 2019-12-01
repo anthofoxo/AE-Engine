@@ -6,10 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cc.antho.ae.audio.AudioSource;
+import cc.antho.ae.common.Destroyable;
 import cc.antho.ae.log.Logger;
 import lombok.Getter;
 
-public abstract class AudioFilter {
+public abstract class AudioFilter implements Destroyable {
 
 	@Getter protected int handle;
 	@Getter private final int type;

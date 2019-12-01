@@ -13,11 +13,12 @@ import java.nio.ShortBuffer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.system.MemoryStack;
 
+import cc.antho.ae.common.Destroyable;
 import cc.antho.ae.common.Util;
 import cc.antho.ae.log.Logger;
 import lombok.Getter;
 
-public final class AudioBuffer {
+public final class AudioBuffer implements Destroyable {
 
 	@Getter private int handle;
 
