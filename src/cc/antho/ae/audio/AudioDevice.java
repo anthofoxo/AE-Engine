@@ -14,6 +14,7 @@ public final class AudioDevice {
 	@Getter private String name;
 	@Getter private long handle;
 	@Getter private ALCCapabilities capabilities;
+	@Getter private int maxAuxSends;
 
 	public AudioDevice(String name) {
 
@@ -35,8 +36,10 @@ public final class AudioDevice {
 
 			if (capabilities.ALC_EXT_EFX) {
 
+				maxAuxSends = alcGetInteger(handle, ALC_MAX_AUXILIARY_SENDS);
+
 				Logger.info("ALC_EXT_EFX is supported");
-				Logger.info("ALC_MAX_AUXILIARY_SENDS: " + alcGetInteger(handle, ALC_MAX_AUXILIARY_SENDS));
+				Logger.info("ALC_MAX_AUXILIARY_SENDS: " + maxAuxSends);
 
 			} else Logger.warn("ALC_EXT_EFX is not supported");
 

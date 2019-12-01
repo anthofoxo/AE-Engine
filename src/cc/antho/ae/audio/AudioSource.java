@@ -1,22 +1,27 @@
 package cc.antho.ae.audio;
 
 import static org.lwjgl.openal.AL10.*;
+import static org.lwjgl.openal.AL11.*;
+import static org.lwjgl.openal.EXTEfx.*;
 
 import org.joml.Vector3f;
 
+import cc.antho.ae.audio.effect.AudioEffectSlot;
 import cc.antho.ae.audio.effect.AudioFilter;
-import cc.antho.ae.audio.effect.AudioFilterNull;
 import cc.antho.ae.log.Logger;
 import lombok.Getter;
-import static org.lwjgl.openal.EXTEfx.*;
 
+@Getter
 public final class AudioSource {
 
-	@Getter private int handle;
-	@Getter private float gain = 1f;
-	@Getter private float pitch = 1f;
+	private int handle;
+	private float gain = 1f;
+	private float pitch = 1f;
 	private AudioManager manager;
 	private AudioFilter filter;
+
+	private AudioEffectSlot[] effectSlots;
+	private AudioFilter[] filters;
 
 	public AudioSource(int handle, AudioManager manager, AudioSettings settings) {
 
@@ -24,6 +29,9 @@ public final class AudioSource {
 
 		this.handle = handle;
 		this.manager = manager;
+
+		effectSlots = new AudioEffectSlot[manager.getDevice().getMaxAuxSends()];
+		filters = new AudioFilter[manager.getDevice().getMaxAuxSends()];
 
 		set(settings);
 
@@ -43,7 +51,6 @@ public final class AudioSource {
 		setPosition(settings.position);
 		setAttenuation(settings.rolloffFactor, settings.referenceDistance, settings.maxDistance);
 		setLooping(settings.looping);
-		setDirectFilter(settings.filter);
 
 	}
 
@@ -97,8 +104,34 @@ public final class AudioSource {
 
 		this.filter = filter;
 
-		if (filter == null) filter = new AudioFilterNull();
-		alSourcei(handle, AL_DIRECT_FILTER, filter.getHandle());
+		if (filter == null) alSourcei(handle, AL_DIRECT_FILTER, AL_FILTER_NULL);
+		else alSourcei(handle, AL_DIRECT_FILTER, filter.getHandle());
+
+	}
+
+	public void setAuxSend(int index, AudioEffectSlot slot, AudioFilter filter) {
+
+		if (this.effectSlots[index] != null) {
+
+			this.effectSlots[index].getAttached().remove(this);
+			this.effectSlots[index].getIndexes().remove(index);
+
+		}
+
+		if (slot != null) {
+
+			slot.getAttached().add(this);
+			slot.getIndexes().add(index);
+
+		}
+
+		if (this.filters[index] != null) this.filters[index].getAttached().remove(this);
+		if (filter != null) filter.getAttached().add(this);
+
+		alSource3i(handle, AL_AUXILIARY_SEND_FILTER, slot == null ? AL_EFFECTSLOT_NULL : slot.getHandle(), 0, filter == null ? AL_EFFECT_NULL : filter.getHandle());
+
+		effectSlots[index] = slot;
+		filters[index] = filter;
 
 	}
 
@@ -138,10 +171,22 @@ public final class AudioSource {
 
 		if (filter != null) filter.getAttached().remove(this);
 
+		for (int i = 0; i < filters.length; i++) {
+
+			if (filters[i] != null) filters[i].getAttached().remove(this);
+			if (effectSlots[i] != null) effectSlots[i].getAttached().remove(this);
+
+			filters[i] = null;
+			effectSlots[i] = null;
+
+		}
+
 		alDeleteSources(handle);
 		handle = 0;
 		manager = null;
 		filter = null;
+		filters = null;
+		effectSlots = null;
 
 	}
 

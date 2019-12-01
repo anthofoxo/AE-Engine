@@ -12,63 +12,58 @@ import cc.antho.ae.audio.AudioBuffer;
 import cc.antho.ae.audio.AudioManager;
 import cc.antho.ae.audio.AudioSettings;
 import cc.antho.ae.audio.AudioSource;
+import cc.antho.ae.audio.effect.AudioEffect;
+import cc.antho.ae.audio.effect.AudioEffectDistort;
+import cc.antho.ae.audio.effect.AudioEffectSlot;
 import cc.antho.ae.audio.effect.AudioFilter;
 import cc.antho.ae.audio.effect.AudioFilterLowpass;
 
 public class ALTest {
 
-	private static int auxEffectSlot;
-	private static int effect;
 	private static AudioFilterLowpass filter;
 	private static AudioSource source;
 
+	private static AudioEffectSlot slot;
+	private static AudioEffectDistort effect;
+
 	static void init(AudioManager mgr) {
 
-//		auxEffectSlot = alGenAuxiliaryEffectSlots();
-//		effect = alGenEffects();
-//
-//		alEffecti(effect, AL_EFFECT_TYPE, AL_EFFECT_REVERB);
-//		alEffectf(effect, AL_REVERB_DECAY_TIME, 5f);
+		effect = new AudioEffectDistort();
+		effect.setEdge(.7f);
+		effect.setGain(.3f);
+
+		slot = new AudioEffectSlot();
+		slot.setEffect(effect);
 
 		filter = new AudioFilterLowpass();
 		filter.setFreqGain(1f);
-		filter.setHighFreqGain(.02f);
+		filter.setHighFreqGain(0f);
 
-		source = mgr.play(new AudioBuffer("/music/menu_1.ogg"), AudioSettings.generate2DLooped());
+		source = mgr.play(new AudioBuffer("/music/meat_boy.ogg"), AudioSettings.generate2DLooped());
 		source.setDirectFilter(filter);
+		source.setAuxSend(0, null, filter);
+		source.setPitch(.6f);
 
+//		effect = alGenEffects();
+//		alEffecti(effect, AL_EFFECT_TYPE, AL_EFFECT_REVERB);
+//		alEffectf(effect, AL_REVERB_DECAY_TIME, 5f);
 //		alEffecti(effect, AL_EFFECT_TYPE, AL_EFFECT_REVERB);
 //		alEffectf(effect, AL_REVERB_DENSITY, 0.4f);
 //		alEffectf(effect, AL_REVERB_DIFFUSION, .1f);
 //		alEffectf(effect, AL_REVERB_GAIN, .4f);
 //		alEffectf(effect, AL_REVERB_DECAY_TIME, 5f);
-//
-//		alAuxiliaryEffectSloti(auxEffectSlot, AL_EFFECTSLOT_EFFECT, effect);
-		// alSourcei(source.getHandle(), AL_DIRECT_FILTER, filter);
-		// alSource3i(source.getHandle(), AL_AUXILIARY_SEND_FILTER, effect, 0,
-		// AL_FILTER_NULL);
 
 	}
 
 	static void render() {
-
-//		alSourcei(source.getHandle(), AL_DIRECT_FILTER, filter);
-//		source.setPitch(.6f);
-//
-//		alSource3i(source.getHandle(), AL_AUXILIARY_SEND_FILTER, effect, 0, filter);
-
-		// alSourcei(source.getHandle(), AL_DIRECT_FILTER, AL_FILTER_NULL);
-		// source.setPitch(1f);
 
 	}
 
 	static void destroy() {
 
 		filter.destroy();
-
-//		alDeleteFilters(filter);
-//		alDeleteEffects(effect);
-//		alDeleteAuxiliaryEffectSlots(auxEffectSlot);
+		slot.destroy();
+		effect.destroy();
 
 	}
 
