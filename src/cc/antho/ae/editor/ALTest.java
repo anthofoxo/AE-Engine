@@ -24,8 +24,8 @@ public class ALTest {
 		slot.setEffect(effect);
 
 		filter = new AudioFilterLowpass();
-		filter.setFreqGain(1f);
-		filter.setHighFreqGain(.01f);
+		filter.setGain(1f);
+		filter.setGainHf(.01f);
 
 		source = mgr.play(new AudioBuffer("/music/meat_boy.ogg"), AudioSettings.generate2DLooped());
 		source.setDirectFilter(filter);
