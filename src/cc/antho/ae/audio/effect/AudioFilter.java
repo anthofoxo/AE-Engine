@@ -35,11 +35,7 @@ public abstract class AudioFilter implements Destroyable {
 
 	}
 
-	public abstract void load();
-
-	public void fullLoad() {
-
-		load();
+	public void load() {
 
 		for (int i = 0; i < attached.size(); i++)
 			attached.get(i).setDirectFilter(this);

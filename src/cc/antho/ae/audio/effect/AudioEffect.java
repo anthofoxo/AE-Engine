@@ -34,11 +34,7 @@ public abstract class AudioEffect implements Destroyable {
 
 	}
 
-	public abstract void load();
-
-	public void fullLoad() {
-
-		load();
+	public void load() {
 
 		for (int i = 0; i < slots.size(); i++)
 			slots.get(i).setEffect(this);

@@ -7,33 +7,31 @@ import lombok.Getter;
 @Getter
 public final class AudioFilterHighpass extends AudioFilter {
 
-	private float freqGain = 1f;
-	private float lowFreqGain = 1f;
+	private float gain;
+	private float gainLf;
 
 	public AudioFilterHighpass() {
 
 		super(AL_FILTER_HIGHPASS);
 
-	}
-
-	public void load() {
-
-		alFilterf(handle, AL_HIGHPASS_GAIN, freqGain);
-		alFilterf(handle, AL_HIGHPASS_GAINLF, lowFreqGain);
+		setGain(1.0f);
+		setGainLf(1.0f);
 
 	}
 
-	public void setFreqGain(float freqGain) {
+	public void setGain(float gain) {
 
-		this.freqGain = freqGain;
-		fullLoad();
+		this.gain = gain;
+		alFilterf(handle, AL_HIGHPASS_GAIN, gain);
+		load();
 
 	}
 
-	public void setLowFreqGain(float lowFreqGain) {
+	public void setGainLf(float gainLf) {
 
-		this.lowFreqGain = lowFreqGain;
-		fullLoad();
+		this.gainLf = gainLf;
+		alFilterf(handle, AL_HIGHPASS_GAINLF, gainLf);
+		load();
 
 	}
 

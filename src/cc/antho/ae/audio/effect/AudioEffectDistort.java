@@ -7,62 +7,61 @@ import lombok.Getter;
 @Getter
 public final class AudioEffectDistort extends AudioEffect {
 
-	private float edge = 0.2f;
-	private float gain = 0.05f;
-	private float lowpassCutoff = 8000f;
-	private float eqCenter = 3600f;
-	private float eqBandwidth = 3600f;
+	private float edge;
+	private float gain;
+	private float lowpassCutoff;
+	private float eqCenter;
+	private float eqBandwidth;
 
 	public AudioEffectDistort() {
 
 		super(AL_EFFECT_DISTORTION);
 
-		load();
-
-	}
-
-	public void load() {
-
-		alEffectf(handle, AL_DISTORTION_EDGE, edge);
-		alEffectf(handle, AL_DISTORTION_GAIN, gain);
-		alEffectf(handle, AL_DISTORTION_LOWPASS_CUTOFF, lowpassCutoff);
-		alEffectf(handle, AL_DISTORTION_EQCENTER, eqCenter);
-		alEffectf(handle, AL_DISTORTION_EQBANDWIDTH, eqBandwidth);
+		setEdge(0.2f);
+		setGain(0.05f);
+		setLowpassCutoff(8000f);
+		setEqCenter(3600f);
+		setEqBandwidth(eqBandwidth);
 
 	}
 
 	public void setEdge(float edge) {
 
 		this.edge = edge;
-		fullLoad();
+		alEffectf(handle, AL_DISTORTION_EDGE, edge);
+		load();
 
 	}
 
 	public void setGain(float gain) {
 
 		this.gain = gain;
-		fullLoad();
+		alEffectf(handle, AL_DISTORTION_GAIN, gain);
+		load();
 
 	}
 
 	public void setLowpassCutoff(float lowpassCutoff) {
 
 		this.lowpassCutoff = lowpassCutoff;
-		fullLoad();
+		alEffectf(handle, AL_DISTORTION_LOWPASS_CUTOFF, lowpassCutoff);
+		load();
 
 	}
 
 	public void setEqCenter(float eqCenter) {
 
 		this.eqCenter = eqCenter;
-		fullLoad();
+		alEffectf(handle, AL_DISTORTION_EQCENTER, eqCenter);
+		load();
 
 	}
 
 	public void setEqBandwidth(float eqBandwidth) {
 
 		this.eqBandwidth = eqBandwidth;
-		fullLoad();
+		alEffectf(handle, AL_DISTORTION_EQBANDWIDTH, eqBandwidth);
+		load();
 
 	}
 
