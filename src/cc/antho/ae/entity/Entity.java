@@ -8,7 +8,7 @@ import lombok.Setter;
 
 public class Entity {
 
-	private Map<Class<? extends Component>, Component> components = new HashMap<>();
+	private final Map<Class<? extends Component>, Component> components = new HashMap<>();
 	@Getter @Setter private String tag = "untagged";
 	@Getter @Setter private boolean enabled = true;
 
@@ -27,11 +27,26 @@ public class Entity {
 		component.entity = this;
 		components.put(clazz, component);
 
+		component.init();
+
+	}
+
+	public <T extends Component> T getComponent(Class<T> clazz) {
+
+		return clazz.cast(components.getOrDefault(clazz, null));
+
 	}
 
 	public void removeComponent(Class<? extends Component> clazz) {
 
-		components.remove(clazz).entity = null;
+		Component c = components.remove(clazz);
+
+		if (c != null) {
+
+			c.destroy();
+			c.entity = null;
+
+		}
 
 	}
 

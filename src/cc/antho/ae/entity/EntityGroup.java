@@ -23,6 +23,12 @@ public class EntityGroup {
 
 	}
 
+	public List<Entity> getEntities() {
+
+		return entities;
+
+	}
+
 	public void tick() {
 
 		for (Entity e : entities)

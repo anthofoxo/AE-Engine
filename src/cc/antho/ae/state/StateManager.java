@@ -3,46 +3,55 @@ package cc.antho.ae.state;
 import cc.antho.ae.log.Logger;
 import lombok.Getter;
 
-public final class StateManager {
+public final class StateManager<Owner> {
 
-	@Getter private State scene;
+	@Getter private final Owner owner;
+	@Getter private State<Owner> state;
 
-	public void setState(State scene) {
+	public StateManager(Owner owner) {
 
-		if (this.scene != null) {
-
-			this.scene.destroy();
-			this.scene.setManager(null);
-
-		}
-
-		Logger.info("Setting state to: " + scene);
-		this.scene = scene;
-
-		if (this.scene != null) {
-
-			this.scene.setManager(this);
-			this.scene.init();
-
-		}
+		this.owner = owner;
 
 	}
 
-	public void fixedTick() {
+	public void set(State<Owner> state) {
 
-		if (scene != null) scene.fixedTick();
+		if (this.state != null) {
+
+			this.state.destroy();
+			this.state.setOwner(null);
+			this.state.setManager(null);
+
+		}
+
+		Logger.info("Setting state to: " + state);
+		this.state = state;
+
+		if (this.state != null) {
+
+			this.state.setOwner(owner);
+			this.state.setManager(this);
+			this.state.init();
+
+		}
 
 	}
 
 	public void tick() {
 
-		if (scene != null) scene.tick();
+		if (state != null) state.tick();
+
+	}
+
+	public void fixedTick() {
+
+		if (state != null) state.fixedTick();
 
 	}
 
 	public void render() {
 
-		if (scene != null) scene.render();
+		if (state != null) state.render();
 
 	}
 

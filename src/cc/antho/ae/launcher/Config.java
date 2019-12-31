@@ -12,7 +12,6 @@ public class Config {
 	public final String title;
 	public final int width, height;
 	public final int sources;
-	public final String defaultScene;
 
 	public Config(String path) throws FileNotFoundException, IOException {
 
@@ -23,7 +22,6 @@ public class Config {
 		width = root.getInt("width");
 		height = root.getInt("height");
 		sources = root.getInt("sources");
-		defaultScene = root.getString("defaultScene");
 
 	}
 

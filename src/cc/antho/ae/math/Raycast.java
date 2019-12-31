@@ -1,4 +1,4 @@
-package cc.antho.ae.common;
+package cc.antho.ae.math;
 
 import org.joml.Vector3f;
 

@@ -17,9 +17,9 @@ import cc.antho.eventsystem.EventListener;
 import lombok.Getter;
 import lombok.Setter;
 
-public final class AEEngine extends GameLoopI implements EventListener {
+public final class AeEngine extends GameLoopI implements EventListener {
 
-	@Getter private StateManager manager = new StateManager();
+	@Getter private StateManager<AeEngine> manager = new StateManager<>(this);
 	@Getter private FrameCounter counter = new FrameCounter();
 
 	@Getter @Setter private Window window;
@@ -32,9 +32,9 @@ public final class AEEngine extends GameLoopI implements EventListener {
 	@Getter private EventLayer layer;
 	@Getter private GLRenderer renderer = new GLRenderer();
 
-	private AEEngineStartProps props;
+	private AeEngineStartProps props;
 
-	public AEEngine(AEEngineStartProps props) {
+	public AeEngine(AeEngineStartProps props) {
 
 		super(props.getProvider(), 1D / 100D);
 
@@ -125,7 +125,7 @@ public final class AEEngine extends GameLoopI implements EventListener {
 		layer.deregisterEventListener(this);
 		layer.deregisterEventListener(inputManager);
 
-		manager.setState(null);
+		manager.set(null);
 
 		window.destroy();
 

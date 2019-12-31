@@ -1,5 +1,6 @@
 package cc.antho.ae.math;
 
+import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
@@ -12,6 +13,19 @@ public final class Maths {
 	public static final float TAU = 2F * PI;
 
 	private Maths() {
+
+	}
+
+	public static Matrix4f createModelMatrix(Vector3f position, Vector3f rotation, Vector3f scale) {
+
+		Matrix4f matrix = new Matrix4f();
+		matrix.translate(position);
+		matrix.rotate(toRadians(rotation.x), new Vector3f(1, 0, 0));
+		matrix.rotate(toRadians(rotation.y), new Vector3f(0, 1, 0));
+		matrix.rotate(toRadians(rotation.z), new Vector3f(0, 0, 1));
+		matrix.getScale(scale);
+
+		return matrix;
 
 	}
 
