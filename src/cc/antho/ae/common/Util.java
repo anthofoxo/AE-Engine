@@ -89,20 +89,6 @@ public final class Util {
 
 	}
 
-	@Deprecated
-	public static BufferedImage loadResourceToImage(String file) throws IOException {
-
-		InputStream is = getStream(file);
-
-		BufferedImage image = ImageIO.read(is);
-		image.flush();
-
-		is.close();
-
-		return image;
-
-	}
-
 	// https://stackoverflow.com/a/23457861/10830440
 	public static void flip(BufferedImage image) {
 
@@ -123,26 +109,6 @@ public final class Util {
 			if (t.equals(value)) return true;
 
 		return false;
-
-	}
-
-	@Deprecated
-	public static String loadResourceToString(String file) throws IOException {
-
-		InputStream is = getStream(file);
-		InputStreamReader isr = new InputStreamReader(is);
-		BufferedReader br = new BufferedReader(isr);
-		StringBuilder sb = new StringBuilder();
-		String line;
-
-		while ((line = br.readLine()) != null)
-			sb.append(line + "\n");
-
-		br.close();
-		isr.close();
-		is.close();
-
-		return sb.toString();
 
 	}
 
