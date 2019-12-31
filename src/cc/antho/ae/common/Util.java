@@ -13,6 +13,8 @@ import javax.imageio.ImageIO;
 
 public final class Util {
 
+	public static int BLOCK_READ_SIZE = 1024;
+
 	private Util() {
 
 	}
@@ -21,13 +23,19 @@ public final class Util {
 
 		final ByteArrayOutputStream os = new ByteArrayOutputStream();
 
-		final byte[] tmp = new byte[1024];
+		final byte[] tmp = new byte[BLOCK_READ_SIZE];
 		int len;
 
 		while ((len = stream.read(tmp)) != -1)
 			os.write(tmp, 0, len);
 
 		return os.toByteArray();
+
+	}
+
+	public static final String loadString(final InputStream stream) throws IOException {
+
+		return new String(loadByteArray(stream));
 
 	}
 
@@ -60,6 +68,7 @@ public final class Util {
 
 	}
 
+	@Deprecated
 	public static String loadResourceToString(String file) throws IOException {
 
 		InputStream is = getStream(file);
@@ -87,7 +96,8 @@ public final class Util {
 		String name, message;
 		StackTraceElement[] trace;
 
-		do {
+		do
+		{
 
 			if (first) first = false;
 			else s.append("Caused by: ");
@@ -109,11 +119,13 @@ public final class Util {
 
 	public static void yield(long millis) {
 
-		try {
+		try
+		{
 
 			Thread.sleep(millis);
 
-		} catch (InterruptedException e) {
+		} catch (InterruptedException e)
+		{
 
 			Thread.currentThread().interrupt();
 

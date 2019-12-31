@@ -88,7 +88,7 @@ public final class GLRenderer {
 
 	public GLShaderProgram genProgram(String vss, String fss) throws IOException {
 
-		return genProgramDirect(Util.loadResourceToString(vss), Util.loadResourceToString(fss));
+		return genProgramDirect(Util.loadString(Util.getStream(vss)), Util.loadString(Util.getStream(fss)));
 
 	}
 
