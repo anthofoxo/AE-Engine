@@ -11,21 +11,14 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.joml.Matrix4f;
-import org.joml.Vector3f;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import cc.antho.ae.audio.AudioBuffer;
-import cc.antho.ae.audio.AudioSettings;
-import cc.antho.ae.camera.Camera;
-import cc.antho.ae.common.Util;
 import cc.antho.ae.engine.AeEngine;
 import cc.antho.ae.entity.Component;
 import cc.antho.ae.entity.Entity;
 import cc.antho.ae.entity.EntityGroup;
 import cc.antho.ae.entity.Transform;
-import cc.antho.ae.math.Maths;
 import cc.antho.ae.renderer.gl.GLShaderProgram;
 import cc.antho.ae.renderer.gl.GLShaderSource;
 import cc.antho.ae.renderer.gl.GLTexture2D;
@@ -33,6 +26,11 @@ import cc.antho.ae.renderer.gl.model.ModelData;
 import cc.antho.ae.renderer.gl.model.ModelLoader;
 import cc.antho.ae.renderer.gl.model.RawModel;
 import cc.antho.ae.state.State;
+import cc.antho.audio.AudioBuffer;
+import cc.antho.audio.AudioSettings;
+import cc.antho.common.Camera;
+import cc.antho.common.Util;
+import cc.antho.common.math.Maths;
 
 public class BaseState extends State<AeEngine> {
 

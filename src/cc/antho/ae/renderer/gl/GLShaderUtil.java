@@ -3,7 +3,7 @@ package cc.antho.ae.renderer.gl;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 
-import cc.antho.ae.log.Logger;
+import cc.antho.common.log.Logger;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 

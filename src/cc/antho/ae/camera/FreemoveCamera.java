@@ -1,6 +1,7 @@
 package cc.antho.ae.camera;
 
-import cc.antho.ae.math.Maths;
+import cc.antho.common.Camera;
+import cc.antho.common.math.Maths;
 
 public class FreemoveCamera extends Camera {
 

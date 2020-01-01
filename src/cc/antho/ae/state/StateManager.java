@@ -1,6 +1,6 @@
 package cc.antho.ae.state;
 
-import cc.antho.ae.log.Logger;
+import cc.antho.common.log.Logger;
 import lombok.Getter;
 
 public final class StateManager<Owner> {

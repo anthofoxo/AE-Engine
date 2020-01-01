@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.joml.Vector3f;
 
-import cc.antho.ae.math.Maths;
 import cc.antho.ae.terrain.generator.TerrainGenerator;
+import cc.antho.common.math.Maths;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

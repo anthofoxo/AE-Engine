@@ -5,8 +5,8 @@ import static org.lwjgl.opengl.GL20.*;
 
 import java.io.IOException;
 
-import cc.antho.ae.common.Util;
-import cc.antho.ae.renderer.color.Color;
+import cc.antho.common.Util;
+import cc.antho.common.color.Color;
 
 public final class GLRenderer {
 

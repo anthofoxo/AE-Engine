@@ -9,8 +9,8 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
-import cc.antho.ae.common.Destroyable;
-import cc.antho.ae.renderer.color.Color;
+import cc.antho.common.Destroyable;
+import cc.antho.common.color.Color;
 import lombok.Getter;
 
 public final class GLShaderProgram implements Destroyable {

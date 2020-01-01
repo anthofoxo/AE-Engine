@@ -3,8 +3,8 @@ package cc.antho.ae.renderer.gl.model;
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
 
-import cc.antho.ae.math.builder.FloatBuilder;
-import cc.antho.ae.math.builder.IntBuilder;
+import cc.antho.common.builder.FloatBuilder;
+import cc.antho.common.builder.IntBuilder;
 
 public class Batcher {
 

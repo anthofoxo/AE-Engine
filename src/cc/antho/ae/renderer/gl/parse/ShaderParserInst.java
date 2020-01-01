@@ -8,9 +8,9 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import cc.antho.ae.common.Util;
 import cc.antho.ae.renderer.gl.GLRenderer;
 import cc.antho.ae.renderer.gl.GLShaderProgram;
+import cc.antho.common.Util;
 
 public class ShaderParserInst {
 
@@ -64,15 +64,13 @@ public class ShaderParserInst {
 		Pattern pattern = Pattern.compile("@link\\{.+\\}");
 
 		// Keep searching in the source code for @link until there are none found
-		while (true)
-		{
+		while (true) {
 
 			// We have to recreate this as we replace content
 			Matcher matcher = pattern.matcher(content);
 
 			// Parse the code if a match is found, finish searching otherwise
-			if (matcher.find())
-			{
+			if (matcher.find()) {
 
 				// ex: @link{in_position}
 				String match_whole = content.substring(matcher.start(), matcher.end());
@@ -100,19 +98,16 @@ public class ShaderParserInst {
 
 		int mode = MODE_HEADER;
 
-		for (String line : lines)
-		{
+		for (String line : lines) {
 
 			// For each line check if we exit the header or an existing section, is we
 			// change section, adjust the mode and skip this line
-			if (line.strip().equals("@vertex"))
-			{
+			if (line.strip().equals("@vertex")) {
 
 				mode = MODE_VERTEX;
 				continue;
 
-			} else if (line.strip().equals("@fragment"))
-			{
+			} else if (line.strip().equals("@fragment")) {
 
 				mode = MODE_FRAGMENT;
 				continue;
@@ -149,8 +144,7 @@ public class ShaderParserInst {
 		String[] statements = header.toString().split(";");
 
 		// Loop through each statement and add them to their lists
-		for (String statement : statements)
-		{
+		for (String statement : statements) {
 
 			// Strip whitespace off the statement and find the first part
 			String stripped = statement.strip();
@@ -197,8 +191,7 @@ public class ShaderParserInst {
 
 	private void convertAutoLinks() {
 
-		for (LinkInstance inst : autoLinks.keySet())
-		{
+		for (LinkInstance inst : autoLinks.keySet()) {
 
 			String name = inst.name;
 			String newname;
@@ -220,11 +213,9 @@ public class ShaderParserInst {
 		vertex_final.append(parser.getHeader());
 		vertex_final.append("\n\n");
 
-		for (LinkInstance link : inputs)
-		{
+		for (LinkInstance link : inputs) {
 
-			if (link.value != null)
-			{
+			if (link.value != null) {
 
 				vertex_final.append("layout(location = ");
 				vertex_final.append(link.value);
@@ -242,8 +233,7 @@ public class ShaderParserInst {
 
 		vertex_final.append("\n");
 
-		for (LinkInstance link : links)
-		{
+		for (LinkInstance link : links) {
 
 			vertex_final.append("out ");
 			vertex_final.append(link.type);
@@ -255,8 +245,7 @@ public class ShaderParserInst {
 
 		vertex_final.append("\n");
 
-		for (LinkInstance link : uniforms)
-		{
+		for (LinkInstance link : uniforms) {
 
 			vertex_final.append("uniform ");
 			vertex_final.append(link.type);
@@ -268,8 +257,7 @@ public class ShaderParserInst {
 
 		vertex_final.append("\n");
 
-		for (LinkInstance link : consts)
-		{
+		for (LinkInstance link : consts) {
 
 			vertex_final.append("const ");
 			vertex_final.append(link.type);
@@ -283,8 +271,7 @@ public class ShaderParserInst {
 
 		vertex_final.append("\n");
 
-		for (LinkInstance link : autoLinks.keySet())
-		{
+		for (LinkInstance link : autoLinks.keySet()) {
 
 			vertex_main.append("\t");
 			vertex_main.append(autoLinks.get(link).name);
@@ -307,8 +294,7 @@ public class ShaderParserInst {
 		fragment_final.append(parser.getHeader());
 		fragment_final.append("\n\n");
 
-		for (LinkInstance link : links)
-		{
+		for (LinkInstance link : links) {
 
 			fragment_final.append("in ");
 			fragment_final.append(link.type);
@@ -320,11 +306,9 @@ public class ShaderParserInst {
 
 		fragment_final.append("\n");
 
-		for (LinkInstance link : outputs)
-		{
+		for (LinkInstance link : outputs) {
 
-			if (link.value != null)
-			{
+			if (link.value != null) {
 
 				fragment_final.append("layout(location = ");
 				fragment_final.append(link.value);
@@ -342,8 +326,7 @@ public class ShaderParserInst {
 
 		fragment_final.append("\n");
 
-		for (LinkInstance link : uniforms)
-		{
+		for (LinkInstance link : uniforms) {
 
 			fragment_final.append("uniform ");
 			fragment_final.append(link.type);
@@ -355,8 +338,7 @@ public class ShaderParserInst {
 
 		fragment_final.append("\n");
 
-		for (LinkInstance link : consts)
-		{
+		for (LinkInstance link : consts) {
 
 			fragment_final.append("const ");
 			fragment_final.append(link.type);
@@ -382,21 +364,17 @@ public class ShaderParserInst {
 
 		program.bind();
 
-		for (LinkInstance link : uniforms)
-		{
+		for (LinkInstance link : uniforms) {
 
 			if (link.value == null) continue;
 
-			if (link.type.equals("sampler2D"))
-			{
+			if (link.type.equals("sampler2D")) {
 
-				try
-				{
+				try {
 
 					program.uniform1i(link.name, Integer.parseInt(link.value));
 
-				} catch (NumberFormatException e)
-				{
+				} catch (NumberFormatException e) {
 
 					System.err.println("Unsupported auto uniform loader value: " + link.value + " for type: " + link.type);
 

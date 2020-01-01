@@ -3,10 +3,6 @@ package cc.antho.ae.launcher;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 
 import org.lwjgl.opengl.GL;
 
@@ -14,13 +10,11 @@ import cc.antho.abstractwindow.GLContext;
 import cc.antho.abstractwindow.GlfwWindow;
 import cc.antho.abstractwindow.Window;
 import cc.antho.abstractwindow.event.window.EventWindowClose;
-import cc.antho.ae.common.Util;
 import cc.antho.ae.engine.AeEngine;
 import cc.antho.ae.engine.AeEngineStartProps;
-import cc.antho.ae.log.Logger;
-import cc.antho.ae.log.LoggerImpl;
-import cc.antho.ae.state.State;
 import cc.antho.ae.time.GlfwTimeProvider;
+import cc.antho.common.log.Logger;
+import cc.antho.common.log.LoggerImpl;
 import cc.antho.eventsystem.EventHandler;
 import cc.antho.eventsystem.EventLayer;
 import cc.antho.eventsystem.EventListener;

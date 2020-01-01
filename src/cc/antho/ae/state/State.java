@@ -1,6 +1,6 @@
 package cc.antho.ae.state;
 
-import cc.antho.ae.common.Destroyable;
+import cc.antho.common.Destroyable;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;

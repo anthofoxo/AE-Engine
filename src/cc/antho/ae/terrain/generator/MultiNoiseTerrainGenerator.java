@@ -1,6 +1,6 @@
 package cc.antho.ae.terrain.generator;
 
-import cc.antho.ae.math.OpenSimplexNoise;
+import cc.antho.common.OpenSimplexNoise;
 
 public final class MultiNoiseTerrainGenerator extends TerrainGenerator {
 

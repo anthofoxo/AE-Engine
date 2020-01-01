@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import cc.antho.ae.camera.Camera;
 import cc.antho.ae.renderer.gl.GLRenderer;
+import cc.antho.common.Camera;
 
 public class ParticleMaster {
 

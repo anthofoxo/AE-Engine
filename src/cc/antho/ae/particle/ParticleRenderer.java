@@ -8,12 +8,12 @@ import java.util.List;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
-import cc.antho.ae.camera.Camera;
-import cc.antho.ae.math.Maths;
 import cc.antho.ae.renderer.gl.GLRenderer;
 import cc.antho.ae.renderer.gl.GLShaderProgram;
 import cc.antho.ae.renderer.gl.model.Dataset;
 import cc.antho.ae.renderer.gl.model.RawModel;
+import cc.antho.common.Camera;
+import cc.antho.common.math.Maths;
 
 public class ParticleRenderer {
 

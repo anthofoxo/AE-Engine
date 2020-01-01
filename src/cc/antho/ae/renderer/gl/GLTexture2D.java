@@ -10,7 +10,7 @@ import java.nio.ByteBuffer;
 
 import org.lwjgl.BufferUtils;
 
-import cc.antho.ae.common.Destroyable;
+import cc.antho.common.Destroyable;
 
 public class GLTexture2D extends GLTexture implements Destroyable {
 

@@ -2,7 +2,7 @@ package cc.antho.ae.renderer.gl;
 
 import static org.lwjgl.opengl.GL30.*;
 
-import cc.antho.ae.common.Destroyable;
+import cc.antho.common.Destroyable;
 import lombok.Getter;
 
 public final class GLFramebuffer implements Destroyable {

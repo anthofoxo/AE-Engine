@@ -3,10 +3,10 @@ package cc.antho.ae.terrain;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
-import cc.antho.ae.math.Maths;
 import cc.antho.ae.renderer.gl.model.ModelData;
 import cc.antho.ae.terrain.generator.TerrainGenerator;
 import cc.antho.ae.terrain.generator.TerrainGeneratorPositionMode;
+import cc.antho.common.math.Maths;
 import lombok.Getter;
 
 public final class Terrain {

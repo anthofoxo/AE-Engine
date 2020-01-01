@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import org.json.JSONObject;
 
-import cc.antho.ae.common.Util;
+import cc.antho.common.Util;
 
 public class Config {
 
