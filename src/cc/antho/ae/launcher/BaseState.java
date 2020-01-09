@@ -80,7 +80,7 @@ public class BaseState extends State<AeEngine> {
 
 		}
 
-		JSONObject modelsNode = sceneConfig.optJSONObject("assets");
+		JSONObject modelsNode = sceneConfig.optJSONObject("assets").getJSONObject("models");
 
 		if (modelsNode != null) {
 
